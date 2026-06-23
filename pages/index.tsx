@@ -39,7 +39,7 @@ const T = {
       orderBtn:   'Order',
     },
     menu: [
-      { name:'Silken Tofu Bowl',  desc:'Smooth silken tofu on jasmine rice, drenched in our house garlic soy broth with spring onion oil.', price:'RM 12.90', badge:'Best Seller',  badgeColor:'bg-amber-100 text-amber-700',  emoji:'🍚' },
+      { name:'Tradisional Press Tofu',  desc:'Firm, dense, and ready to cook — our pressed tofu is made from pure, non-GMO soybeans with minimal moisture for a satisfying texture that holds its shape beautifully in any dish.', price:'RM 11.00 for 8 pieces', badge:'Best Seller',  badgeColor:'bg-amber-100 text-amber-700',  emoji:'🍚' },
       { name:'Crispy Tofu Katsu', desc:'Panko-crusted tofu fillet, golden-fried and served with house katsu sauce and shredded cabbage.',   price:'RM 14.90', badge:'Fan Fav',      badgeColor:'bg-rose-100 text-rose-700',    emoji:'🥢' },
       { name:'Mapo Tofu Bowl',    desc:'Classic Sichuan-inspired silken tofu in a rich, mildly spicy bean-paste broth with minced mushroom.',price:'RM 13.90', badge:'Spicy',        badgeColor:'bg-red-100 text-red-700',      emoji:'🌶️' },
       { name:'Tofu Satay Plate',  desc:'Marinated grilled tofu skewers with signature peanut sauce, compressed rice, and cucumber.',        price:'RM 11.90', badge:'Local Twist',  badgeColor:'bg-yellow-100 text-yellow-700',emoji:'🍡' },
@@ -104,7 +104,7 @@ const T = {
       orderBtn:   'Pesan',
     },
     menu: [
-      { name:'Mangkuk Tauhu Sutera',  desc:'Tauhu sutera lembut di atas nasi melati, disiram dengan kuah soya bawang putih istimewa dan minyak bawang spring.',   price:'RM 12.90', badge:'Terlaris',        badgeColor:'bg-amber-100 text-amber-700',  emoji:'🍚' },
+      { name:'Tauhu Press Tradisional',  desc:'Padat, kenyal, dan sedia untuk dimasak — tauhu press kami diperbuat daripada kacang soya tulen tanpa GMO dengan kandungan air yang rendah, menghasilkan tekstur yang memuaskan dan mengekalkan bentuknya dengan sempurna dalam setiap hidangan.',   price:'RM 11.00 untuk 8 ketul', badge:'Terlaris',        badgeColor:'bg-amber-100 text-amber-700',  emoji:'🍚' },
       { name:'Tauhu Katsu Rangup',    desc:'Fillet tauhu bersalut panko, digoreng emas dan dihidangkan dengan sos katsu istimewa dan kobis hiris.',                 price:'RM 14.90', badge:'Kegemaran',       badgeColor:'bg-rose-100 text-rose-700',    emoji:'🥢' },
       { name:'Mangkuk Mapo Tauhu',    desc:'Tauhu sutera klasik ilham Sichuan dalam kuah pasta kacang yang kaya dan sedikit pedas dengan cendawan cincang.',       price:'RM 13.90', badge:'Pedas',           badgeColor:'bg-red-100 text-red-700',      emoji:'🌶️' },
       { name:'Pinggan Satay Tauhu',   desc:'Cucuk tauhu panggang marinated dengan sos kacang istimewa, nasi mampat, dan timun.',                                    price:'RM 11.90', badge:'Sentuhan Tempatan',badgeColor:'bg-yellow-100 text-yellow-700',emoji:'🍡' },
