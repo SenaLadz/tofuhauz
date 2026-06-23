@@ -145,17 +145,65 @@ const T = {
   },
 }
 
+// ── Change this PIN to something only you know ───────────────────────────────
+const ADMIN_PIN = '2018'
+// ─────────────────────────────────────────────────────────────────────────────
+
 interface Bean { x:number; y:number; vy:number; vx:number; size:number; rotation:number; rotSpeed:number; alpha:number; swayAmp:number; swayFreq:number; phase:number }
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [logoErr,  setLogoErr]  = useState(false)
-  const [lang,     setLang]     = useState<'en'|'bm'>('en')
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [menuOpen,       setMenuOpen]       = useState(false)
+  const [scrolled,       setScrolled]       = useState(false)
+  const [logoErr,        setLogoErr]        = useState(false)
+  const [lang,           setLang]           = useState<'en'|'bm'>('en')
+  const [ordersOpen,     setOrdersOpen]     = useState(true)
+  const [isAdmin,        setIsAdmin]        = useState(false)
+  const [showPinModal,   setShowPinModal]   = useState(false)
+  const [pinInput,       setPinInput]       = useState('')
+  const [pinError,       setPinError]       = useState(false)
+  const [logoTaps,       setLogoTaps]       = useState(0)
+  const canvasRef   = useRef<HTMLCanvasElement>(null)
+  const tapTimer    = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const t = T[lang]
   const waLink = `https://wa.me/${BIZ.whatsapp}?text=${t.waMsg}`
+
+  // Load persisted state
+  useEffect(() => {
+    const stored = localStorage.getItem('th_orders_open')
+    if (stored !== null) setOrdersOpen(stored === 'true')
+    if (localStorage.getItem('th_admin') === 'true') setIsAdmin(true)
+  }, [])
+
+  // Persist orders state
+  useEffect(() => {
+    localStorage.setItem('th_orders_open', String(ordersOpen))
+  }, [ordersOpen])
+
+  const handleLogoTap = () => {
+    const next = logoTaps + 1
+    setLogoTaps(next)
+    if (tapTimer.current) clearTimeout(tapTimer.current)
+    if (next >= 5) { setShowPinModal(true); setLogoTaps(0) }
+    else tapTimer.current = setTimeout(() => setLogoTaps(0), 2000)
+  }
+
+  const submitPin = () => {
+    if (pinInput === ADMIN_PIN) {
+      setIsAdmin(true)
+      localStorage.setItem('th_admin', 'true')
+      setShowPinModal(false)
+      setPinError(false)
+    } else {
+      setPinError(true)
+    }
+    setPinInput('')
+  }
+
+  const logout = () => {
+    setIsAdmin(false)
+    localStorage.removeItem('th_admin')
+  }
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20)
@@ -216,6 +264,64 @@ export default function Home() {
 
       <canvas ref={canvasRef} style={{position:'fixed',inset:0,width:'100%',height:'100%',zIndex:0,pointerEvents:'none'}} />
 
+      {/* ── Orders closed banner ── */}
+      {!ordersOpen && (
+        <div className="fixed top-0 left-0 right-0 z-[60] bg-red-600 text-white text-center py-2.5 text-sm font-semibold tracking-wide">
+          🚫 {lang === 'bm' ? 'Pesanan ditutup buat masa ini. Sila semak semula kemudian.' : 'Orders are currently closed. Please check back later.'}
+        </div>
+      )}
+
+      {/* ── Admin PIN modal ── */}
+      {showPinModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-8 w-80 shadow-2xl">
+            <h3 className="text-lg font-bold text-[#2c1a0e] mb-1 text-center">Admin Access</h3>
+            <p className="text-[#7a4a28] text-xs text-center mb-6">Enter your PIN to continue</p>
+            <input
+              type="password" inputMode="numeric" maxLength={6}
+              value={pinInput}
+              onChange={e => { setPinInput(e.target.value); setPinError(false) }}
+              onKeyDown={e => e.key === 'Enter' && submitPin()}
+              placeholder="Enter PIN"
+              className="w-full border-2 border-amber-200 rounded-xl px-4 py-3 text-center text-2xl tracking-[0.5em] mb-3 outline-none focus:border-[#d4891a]"
+              autoFocus
+            />
+            {pinError && <p className="text-red-500 text-xs text-center mb-3">Incorrect PIN. Try again.</p>}
+            <div className="flex gap-3">
+              <button onClick={() => { setShowPinModal(false); setPinInput(''); setPinError(false) }}
+                className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 text-gray-500 text-sm font-semibold hover:bg-gray-50">
+                Cancel
+              </button>
+              <button onClick={submitPin}
+                className="flex-1 py-2.5 rounded-xl bg-[#2c1a0e] text-white text-sm font-semibold hover:bg-[#4a2c18]">
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Admin floating panel ── */}
+      {isAdmin && (
+        <div className="fixed bottom-28 right-6 z-[90] bg-[#2c1a0e] text-white rounded-2xl p-4 shadow-2xl w-56">
+          <p className="text-amber-300 text-xs font-bold uppercase tracking-widest mb-3">Admin Panel</p>
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm font-semibold">{lang === 'bm' ? 'Status Pesanan' : 'Order Status'}</span>
+            <button
+              onClick={() => setOrdersOpen(o => !o)}
+              className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${ordersOpen ? 'bg-green-500' : 'bg-red-500'}`}>
+              <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-300 ${ordersOpen ? 'left-7' : 'left-1'}`} />
+            </button>
+          </div>
+          <p className={`text-xs text-center font-semibold mb-3 ${ordersOpen ? 'text-green-400' : 'text-red-400'}`}>
+            {ordersOpen ? '✅ Orders OPEN' : '🚫 Orders CLOSED'}
+          </p>
+          <button onClick={logout} className="w-full py-1.5 rounded-xl border border-white/20 text-xs text-white/60 hover:text-white hover:border-white/40 transition-colors">
+            Logout
+          </button>
+        </div>
+      )}
+
       {/* WhatsApp floating button */}
       <a href={waLink} target="_blank" rel="noopener noreferrer" className="whatsapp-btn" aria-label="Order on WhatsApp">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
@@ -228,7 +334,7 @@ export default function Home() {
         scrolled ? 'bg-[#fef9ec]/95 backdrop-blur-md shadow-md border-b border-amber-100' : 'bg-transparent'
       }`}>
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-          <a href="#top" className="flex items-center">
+          <a href="#top" className="flex items-center" onClick={handleLogoTap}>
             {!logoErr
               ? <img src="/logo.png" alt="Tofu Hauz" className="h-12 w-auto" onError={() => setLogoErr(true)} />
               : <span className="brand-name text-2xl text-[#2c1a0e]">TOFU HAUZ</span>
@@ -238,8 +344,10 @@ export default function Home() {
             {(['menu','about','testimonials','contact'] as const).map(s => (
               <a key={s} href={`#${s}`} className="nav-link hover:text-[#d4891a] transition-colors">{t.nav[s]}</a>
             ))}
-            <a href={waLink} target="_blank" rel="noopener noreferrer"
-              className="btn-dark px-5 py-2 rounded-full text-sm font-semibold">{t.nav.order}</a>
+            {ordersOpen
+              ? <a href={waLink} target="_blank" rel="noopener noreferrer" className="btn-dark px-5 py-2 rounded-full text-sm font-semibold">{t.nav.order}</a>
+              : <span className="px-5 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-400 cursor-not-allowed">{lang==='bm'?'Ditutup':'Closed'}</span>
+            }
             {/* Language toggle */}
             <button
               onClick={() => setLang(l => l === 'en' ? 'bm' : 'en')}
@@ -271,8 +379,10 @@ export default function Home() {
             {(['menu','about','testimonials','contact'] as const).map(s => (
               <a key={s} href={`#${s}`} onClick={() => setMenuOpen(false)} className="hover:text-[#d4891a] transition-colors">{t.nav[s]}</a>
             ))}
-            <a href={waLink} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}
-              className="btn-dark text-center px-5 py-2.5 rounded-full font-semibold">{t.nav.order}</a>
+            {ordersOpen
+              ? <a href={waLink} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="btn-dark text-center px-5 py-2.5 rounded-full font-semibold">{t.nav.order}</a>
+              : <span className="text-center px-5 py-2.5 rounded-full font-semibold bg-gray-200 text-gray-400 cursor-not-allowed">{lang==='bm'?'Ditutup':'Closed'}</span>
+            }
           </div>
         )}
       </nav>
@@ -312,13 +422,16 @@ export default function Home() {
               style={{animationDelay:'0.4s'}}>{t.description}</p>
             <div className="animate-fade-up flex flex-col sm:flex-row gap-4 justify-center" style={{animationDelay:'0.5s'}}>
               <a href="#menu" className="btn-dark px-9 py-4 rounded-full font-semibold text-base">{t.hero.btn1}</a>
-              <a href={waLink} target="_blank" rel="noopener noreferrer"
-                className="btn-cyan bg-transparent px-9 py-4 rounded-full font-semibold text-base flex items-center justify-center gap-2">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
-                {t.hero.btn2}
-              </a>
+              {ordersOpen
+                ? <a href={waLink} target="_blank" rel="noopener noreferrer"
+                    className="btn-cyan bg-transparent px-9 py-4 rounded-full font-semibold text-base flex items-center justify-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    {t.hero.btn2}
+                  </a>
+                : <span className="border-2 border-gray-300 text-gray-400 px-9 py-4 rounded-full font-semibold text-base flex items-center justify-center gap-2 cursor-not-allowed">
+                    🚫 {lang==='bm'?'Pesanan Ditutup':'Orders Closed'}
+                  </span>
+              }
             </div>
           </div>
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-[#d4891a]/50" style={{zIndex:2}}>
@@ -376,9 +489,12 @@ export default function Home() {
                   <p className="text-[#7a4a28] text-sm leading-relaxed mb-5">{item.desc}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-[#d4891a] font-bold text-lg">{item.price}</span>
-                    <a href={`https://wa.me/${BIZ.whatsapp}?text=${t.waOrder}${encodeURIComponent(item.name)}`}
-                      target="_blank" rel="noopener noreferrer"
-                      className="btn-dark text-xs font-bold px-4 py-2 rounded-full">{t.menuSection.orderBtn}</a>
+                    {ordersOpen
+                      ? <a href={`https://wa.me/${BIZ.whatsapp}?text=${t.waOrder}${encodeURIComponent(item.name)}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="btn-dark text-xs font-bold px-4 py-2 rounded-full">{t.menuSection.orderBtn}</a>
+                      : <span className="text-xs font-bold px-4 py-2 rounded-full bg-gray-200 text-gray-400 cursor-not-allowed">{lang==='bm'?'Tutup':'Closed'}</span>
+                    }
                   </div>
                   </div>
                 </div>
@@ -386,11 +502,16 @@ export default function Home() {
             </div>
             <div className="text-center mt-14">
               <p className="text-[#7a4a28] text-sm mb-4">{t.menuSection.cantDecide}</p>
-              <a href={waLink} target="_blank" rel="noopener noreferrer"
-                className="btn-dark inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold">
-                {t.menuSection.chat}
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
+              {ordersOpen
+                ? <a href={waLink} target="_blank" rel="noopener noreferrer"
+                    className="btn-dark inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold">
+                    {t.menuSection.chat}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </a>
+                : <span className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold bg-gray-200 text-gray-400 cursor-not-allowed">
+                    🚫 {lang==='bm'?'Pesanan Ditutup':'Orders Closed'}
+                  </span>
+              }
             </div>
           </div>
         </section>
@@ -459,8 +580,12 @@ export default function Home() {
             <div className="text-5xl mb-6 animate-float">🍽️</div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{fontFamily:'Playfair Display, serif'}}>{t.cta.heading}</h2>
             <p className="text-amber-200 mb-10 leading-relaxed">{t.cta.sub}</p>
-            <a href={waLink} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 bg-[#00b4d8] hover:bg-[#009ab8] text-white px-9 py-4 rounded-full font-bold text-base transition-all hover:-translate-y-1 hover:shadow-xl">
+            {!ordersOpen && (
+              <p className="text-red-400 font-semibold mb-4 text-sm">🚫 {lang==='bm'?'Pesanan ditutup buat masa ini.':'Orders are currently closed.'}</p>
+            )}
+            <a href={ordersOpen ? waLink : '#'} target={ordersOpen ? '_blank' : undefined} rel="noopener noreferrer"
+              onClick={!ordersOpen ? e => e.preventDefault() : undefined}
+              className={`inline-flex items-center gap-3 px-9 py-4 rounded-full font-bold text-base transition-all ${ordersOpen ? 'bg-[#00b4d8] hover:bg-[#009ab8] text-white hover:-translate-y-1 hover:shadow-xl' : 'bg-gray-500 text-gray-300 cursor-not-allowed opacity-60'}`}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
               </svg>
