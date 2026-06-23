@@ -363,8 +363,8 @@ export default function Home() {
               {t.menu.map((item) => (
                 <div key={item.name} className="warm-card rounded-2xl overflow-hidden">
                   {item.image && (
-                    <div className="w-full h-48 overflow-hidden bg-amber-50">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                    <div className="w-full bg-amber-50 flex items-center justify-center p-4">
+                      <img src={item.image} alt={item.name} className="w-full h-auto object-contain max-h-56" />
                     </div>
                   )}
                   <div className="p-6">
