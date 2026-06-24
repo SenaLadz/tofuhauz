@@ -603,8 +603,30 @@ export default function Home() {
               <div className="section-divider" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Location card with navigation buttons */}
+              <div className="warm-card rounded-2xl p-8 text-center">
+                <div className="text-4xl mb-4">📍</div>
+                <h3 className="font-bold text-[#2c1a0e] mb-3 text-lg">{t.contact.location}</h3>
+                <p className="text-[#7a4a28] text-sm leading-relaxed mb-5">{BIZ.address}</p>
+                <div className="flex gap-2 justify-center">
+                  <a href="https://www.google.com/maps/dir/?api=1&destination=2.8368688,101.8007204"
+                    target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-white transition-all hover:scale-105"
+                    style={{background:'#4285F4'}}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    Google Maps
+                  </a>
+                  <a href="https://waze.com/ul?ll=2.8368688,101.8007204&navigate=yes"
+                    target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-white transition-all hover:scale-105"
+                    style={{background:'#33CCFF'}}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 1.5C6.2 1.5 1.5 6.2 1.5 12S6.2 22.5 12 22.5 22.5 17.8 22.5 12 17.8 1.5 12 1.5zm0 3.5c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 9c-.6 1.8-2.2 3-4 3s-3.4-1.2-4-3h8z"/></svg>
+                    Waze
+                  </a>
+                </div>
+              </div>
+              {/* Hours and contact cards */}
               {[
-                { icon:'📍', title:t.contact.location, lines:[BIZ.address] },
                 { icon:'🕐', title:t.contact.hours,    lines:[t.contact.weekday, t.contact.weekend] },
                 { icon:'📬', title:t.contact.touch,    lines:[BIZ.phone, BIZ.email] },
               ].map((b) => (
