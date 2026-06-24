@@ -49,8 +49,8 @@ const T = {
       label:   'Our Story',
       heading: 'Why We Started Tofu Hauz',
       p1:      'We started Tofu Hauz from a simple belief — that plant-based food should be exciting, satisfying, and accessible to everyone. No bland salads. No sad substitutes.',
-      p2:      `Every bowl, skewer, and dessert we serve is a testament to what tofu can really do when it’s treated with care, creativity, and good spices. Made fresh, made with heart, right from our home kitchen since ${BIZ.established}.`,
-      quote:   '“Great food starts with great ingredients and a lot of love.”',
+      p2:      `Every bowl, skewer, and dessert we serve is a testament to what tofu can really do when it's treated with care, creativity, and good spices. Made fresh, made with heart, right from our home kitchen since ${BIZ.established}.`,
+      quote:   '"Great food starts with great ingredients and a lot of love."',
     },
     testimonials: {
       label:   'Happy Customers',
@@ -64,7 +64,7 @@ const T = {
     cta: {
       heading: 'Ready to Order?',
       sub:     'Skip the queue — order ahead via WhatsApp. Fresh, homemade, ready for pickup or delivery.',
-      btn:     'Chat & Order Now',
+      btn:     'Place an Order',
     },
     contact: {
       label:    'Come Visit Us',
@@ -76,8 +76,23 @@ const T = {
       weekend:  'Sat — Sun  ✦  Closed',
     },
     footer: { rights: `© ${new Date().getFullYear()} Tofu Hauz. All rights reserved.` },
-    waMsg:     "Hi%20Tofu%20Hauz!%20I'd%20like%20to%20place%20an%20order%20%F0%9F%8D%BD%EF%B8%8F",
-    waOrder:   "Hi%20Tofu%20Hauz!%20I%27d%20like%20to%20order%20the%20",
+    waMsg:   "Hi%20Tofu%20Hauz!%20I'd%20like%20to%20place%20an%20order%20%F0%9F%8D%BD%EF%B8%8F",
+    orderForm: {
+      title:      'Place Your Order',
+      name:       'Your Name',       namePh:    'e.g. Ahmad',
+      phone:      'Phone Number',    phonePh:   'e.g. 011-1234 5678',
+      type:       'Order Type',
+      pickup:     '🏠 Pick-up',     delivery:  '🛵 Delivery',
+      address:    'Delivery Address',addressPh: 'Full address for delivery...',
+      items:      'Select Items',
+      notes:      'Notes / Special Requests', notesPh: 'Allergies, spice level, extra items...',
+      confirm:    'Confirm Order via WhatsApp',
+      cancel:     'Cancel',
+      errName:    'Please enter your name.',
+      errPhone:   'Please enter your phone number.',
+      errItems:   'Please select at least one item.',
+      errAddress: 'Please enter your delivery address.',
+    },
   },
   bm: {
     tagline:     'Segar. Berkhasiat. Lazat.',
@@ -114,7 +129,7 @@ const T = {
       heading: 'Mengapa Kami Tubuhkan Tofu Hauz',
       p1:      'Kami memulakan Tofu Hauz dengan satu kepercayaan yang mudah — bahawa makanan berasaskan tumbuhan seharusnya menarik, memuaskan, dan mudah diakses oleh semua orang. Tiada salad hambar. Tiada pengganti yang membosankan.',
       p2:      `Setiap mangkuk, cucuk, dan pencuci mulut yang kami hidangkan adalah bukti apa yang tauhu boleh lakukan apabila diperlakukan dengan penuh perhatian, kreativiti, dan rempah yang baik. Dibuat segar, dibuat dengan hati, terus dari dapur rumah kami sejak ${BIZ.established}.`,
-      quote:   '“Makanan yang hebat bermula dengan bahan-bahan yang hebat dan banyak kasih sayang.”',
+      quote:   '"Makanan yang hebat bermula dengan bahan-bahan yang hebat dan banyak kasih sayang."',
     },
     testimonials: {
       label:   'Pelanggan Gembira',
@@ -128,7 +143,7 @@ const T = {
     cta: {
       heading: 'Bersedia untuk Memesan?',
       sub:     'Langkau giliran — pesan awal melalui WhatsApp. Segar, buatan sendiri, sedia untuk ambil atau penghantaran.',
-      btn:     'Berbual & Pesan Sekarang',
+      btn:     'Buat Pesanan',
     },
     contact: {
       label:    'Jom Lawat Kami',
@@ -141,7 +156,22 @@ const T = {
     },
     footer: { rights: `© ${new Date().getFullYear()} Tofu Hauz. Hak cipta terpelihara.` },
     waMsg:   "Hai%20Tofu%20Hauz!%20Saya%20ingin%20membuat%20pesanan%20%F0%9F%8D%BD%EF%B8%8F",
-    waOrder: "Hai%20Tofu%20Hauz!%20Saya%20ingin%20memesan%20",
+    orderForm: {
+      title:      'Buat Pesanan Anda',
+      name:       'Nama Anda',             namePh:    'cth. Ahmad',
+      phone:      'Nombor Telefon',        phonePh:   'cth. 011-1234 5678',
+      type:       'Jenis Pesanan',
+      pickup:     '🏠 Ambil Sendiri',      delivery:  '🛵 Penghantaran',
+      address:    'Alamat Penghantaran',   addressPh: 'Alamat penuh untuk penghantaran...',
+      items:      'Pilih Item',
+      notes:      'Nota / Permintaan Khas', notesPh:  'Alahan, tahap pedas, item tambahan...',
+      confirm:    'Sahkan Pesanan via WhatsApp',
+      cancel:     'Batal',
+      errName:    'Sila masukkan nama anda.',
+      errPhone:   'Sila masukkan nombor telefon anda.',
+      errItems:   'Sila pilih sekurang-kurangnya satu item.',
+      errAddress: 'Sila masukkan alamat penghantaran anda.',
+    },
   },
 }
 
@@ -162,8 +192,18 @@ export default function Home() {
   const [pinInput,       setPinInput]       = useState('')
   const [pinError,       setPinError]       = useState(false)
   const [logoTaps,       setLogoTaps]       = useState(0)
-  const canvasRef   = useRef<HTMLCanvasElement>(null)
-  const tapTimer    = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // Order form state
+  const [showOrderForm,  setShowOrderForm]  = useState(false)
+  const [orderName,      setOrderName]      = useState('')
+  const [orderPhone,     setOrderPhone]     = useState('')
+  const [orderType,      setOrderType]      = useState<'pickup'|'delivery'>('pickup')
+  const [orderAddress,   setOrderAddress]   = useState('')
+  const [orderNotes,     setOrderNotes]     = useState('')
+  const [orderItems,     setOrderItems]     = useState<Record<string,number>>({})
+  const [orderError,     setOrderError]     = useState('')
+
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const tapTimer  = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const t = T[lang]
   const waLink = `https://wa.me/${BIZ.whatsapp}?text=${t.waMsg}`
@@ -203,6 +243,43 @@ export default function Home() {
   const logout = () => {
     setIsAdmin(false)
     localStorage.removeItem('th_admin')
+  }
+
+  const openOrderForm = (preselect?: string) => {
+    setOrderItems(preselect ? { [preselect]: 1 } : {})
+    setOrderName('')
+    setOrderPhone('')
+    setOrderType('pickup')
+    setOrderAddress('')
+    setOrderNotes('')
+    setOrderError('')
+    setShowOrderForm(true)
+  }
+
+  const submitOrder = () => {
+    const of = t.orderForm
+    if (!orderName.trim())  { setOrderError(of.errName);    return }
+    if (!orderPhone.trim()) { setOrderError(of.errPhone);   return }
+    const selected = Object.entries(orderItems).filter(([, q]) => q > 0)
+    if (!selected.length)   { setOrderError(of.errItems);   return }
+    if (orderType === 'delivery' && !orderAddress.trim()) { setOrderError(of.errAddress); return }
+
+    const itemLines = selected.map(([name, qty]) => `  • ${name} x${qty}`).join('\n')
+    const typeLabel = orderType === 'pickup'
+      ? (lang === 'bm' ? 'Ambil Sendiri' : 'Pick-up')
+      : (lang === 'bm' ? 'Penghantaran'  : 'Delivery')
+    const addrLine = orderType === 'delivery'
+      ? `\n📍 *${lang === 'bm' ? 'Alamat' : 'Address'}:* ${orderAddress}` : ''
+    const noteLine = orderNotes.trim()
+      ? `\n📝 *${lang === 'bm' ? 'Nota' : 'Notes'}:* ${orderNotes}` : ''
+
+    const msg = lang === 'bm'
+      ? `Hai Tofu Hauz! Saya ingin membuat pesanan 🍽️\n\n👤 *Nama:* ${orderName}\n📱 *Telefon:* ${orderPhone}\n🚗 *Jenis:* ${typeLabel}${addrLine}\n\n🛒 *Pesanan:*\n${itemLines}${noteLine}`
+      : `Hi Tofu Hauz! I'd like to place an order 🍽️\n\n👤 *Name:* ${orderName}\n📱 *Phone:* ${orderPhone}\n🚗 *Type:* ${typeLabel}${addrLine}\n\n🛒 *Order:*\n${itemLines}${noteLine}`
+
+    window.open(`https://wa.me/${BIZ.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank')
+    setShowOrderForm(false)
+    setOrderItems({})
   }
 
   useEffect(() => {
@@ -301,6 +378,151 @@ export default function Home() {
         </div>
       )}
 
+      {/* ── Order Form Modal ── */}
+      {showOrderForm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col" style={{maxHeight:'90vh'}}>
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-amber-100 shrink-0">
+              <div>
+                <h3 className="text-lg font-bold text-[#2c1a0e]">{t.orderForm.title}</h3>
+                <p className="text-xs text-[#7a4a28] mt-0.5">{BIZ.name} · WhatsApp</p>
+              </div>
+              <button onClick={() => setShowOrderForm(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors text-xl leading-none">
+                ×
+              </button>
+            </div>
+
+            {/* Scrollable body */}
+            <div className="overflow-y-auto flex-1 px-6 py-5 space-y-5">
+
+              {/* Name */}
+              <div>
+                <label className="block text-xs font-bold text-[#2c1a0e] mb-1.5 uppercase tracking-wide">{t.orderForm.name}</label>
+                <input
+                  value={orderName}
+                  onChange={e => { setOrderName(e.target.value); setOrderError('') }}
+                  placeholder={t.orderForm.namePh}
+                  className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors"
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="block text-xs font-bold text-[#2c1a0e] mb-1.5 uppercase tracking-wide">{t.orderForm.phone}</label>
+                <input
+                  type="tel"
+                  value={orderPhone}
+                  onChange={e => { setOrderPhone(e.target.value); setOrderError('') }}
+                  placeholder={t.orderForm.phonePh}
+                  className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors"
+                />
+              </div>
+
+              {/* Order Type toggle */}
+              <div>
+                <label className="block text-xs font-bold text-[#2c1a0e] mb-2 uppercase tracking-wide">{t.orderForm.type}</label>
+                <div className="flex gap-3">
+                  {(['pickup', 'delivery'] as const).map(ot => (
+                    <button key={ot}
+                      onClick={() => { setOrderType(ot); setOrderError('') }}
+                      className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${
+                        orderType === ot
+                          ? 'border-[#d4891a] bg-amber-50 text-[#d4891a]'
+                          : 'border-amber-100 text-[#7a4a28] hover:border-amber-200'
+                      }`}>
+                      {ot === 'pickup' ? t.orderForm.pickup : t.orderForm.delivery}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Delivery address (conditional) */}
+              {orderType === 'delivery' && (
+                <div>
+                  <label className="block text-xs font-bold text-[#2c1a0e] mb-1.5 uppercase tracking-wide">{t.orderForm.address}</label>
+                  <textarea
+                    value={orderAddress}
+                    onChange={e => { setOrderAddress(e.target.value); setOrderError('') }}
+                    placeholder={t.orderForm.addressPh}
+                    rows={3}
+                    className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors resize-none"
+                  />
+                </div>
+              )}
+
+              {/* Items */}
+              <div>
+                <label className="block text-xs font-bold text-[#2c1a0e] mb-2 uppercase tracking-wide">{t.orderForm.items}</label>
+                <div className="space-y-2">
+                  {t.menu.map(item => {
+                    const qty = orderItems[item.name] || 0
+                    return (
+                      <div key={item.name}
+                        className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${qty > 0 ? 'border-[#d4891a] bg-amber-50' : 'border-amber-100 hover:border-amber-200'}`}>
+                        <span className="text-xl shrink-0">{item.emoji}</span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-[#2c1a0e] truncate">{item.name}</p>
+                          <p className="text-xs text-[#d4891a] font-medium">{item.price}</p>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <button
+                            onClick={() => { setOrderItems(prev => ({ ...prev, [item.name]: Math.max(0, (prev[item.name]||0) - 1) })); setOrderError('') }}
+                            className="w-7 h-7 rounded-full border-2 border-amber-200 text-[#7a4a28] font-bold text-sm hover:border-[#d4891a] hover:text-[#d4891a] transition-all flex items-center justify-center">
+                            −
+                          </button>
+                          <span className="w-5 text-center text-sm font-bold text-[#2c1a0e]">{qty}</span>
+                          <button
+                            onClick={() => { setOrderItems(prev => ({ ...prev, [item.name]: (prev[item.name]||0) + 1 })); setOrderError('') }}
+                            className="w-7 h-7 rounded-full border-2 border-amber-200 text-[#7a4a28] font-bold text-sm hover:border-[#d4891a] hover:text-[#d4891a] transition-all flex items-center justify-center">
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Notes */}
+              <div>
+                <label className="block text-xs font-bold text-[#2c1a0e] mb-1.5 uppercase tracking-wide">{t.orderForm.notes} <span className="text-gray-400 normal-case font-normal">(optional)</span></label>
+                <textarea
+                  value={orderNotes}
+                  onChange={e => setOrderNotes(e.target.value)}
+                  placeholder={t.orderForm.notesPh}
+                  rows={2}
+                  className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors resize-none"
+                />
+              </div>
+
+              {/* Validation error */}
+              {orderError && (
+                <p className="text-red-500 text-sm font-medium flex items-center gap-1.5">
+                  <span>⚠️</span> {orderError}
+                </p>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 border-t border-amber-100 flex gap-3 shrink-0">
+              <button onClick={() => setShowOrderForm(false)}
+                className="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-500 text-sm font-semibold hover:bg-gray-50 transition-colors">
+                {t.orderForm.cancel}
+              </button>
+              <button onClick={submitOrder}
+                className="flex-1 py-3 rounded-xl bg-[#2c1a0e] text-white text-sm font-semibold hover:bg-[#4a2c18] transition-colors flex items-center justify-center gap-2">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="white">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                {t.orderForm.confirm}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Admin floating panel ── */}
       {isAdmin && (
         <div className="fixed bottom-28 right-6 z-[90] bg-[#2c1a0e] text-white rounded-2xl p-4 shadow-2xl w-56">
@@ -345,7 +567,7 @@ export default function Home() {
               <a key={s} href={`#${s}`} className="nav-link hover:text-[#d4891a] transition-colors">{t.nav[s]}</a>
             ))}
             {ordersOpen
-              ? <a href={waLink} target="_blank" rel="noopener noreferrer" className="btn-dark px-5 py-2 rounded-full text-sm font-semibold">{t.nav.order}</a>
+              ? <button onClick={() => openOrderForm()} className="btn-dark px-5 py-2 rounded-full text-sm font-semibold">{t.nav.order}</button>
               : <span className="px-5 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-400 cursor-not-allowed">{lang==='bm'?'Ditutup':'Closed'}</span>
             }
             {/* Language toggle */}
@@ -380,7 +602,7 @@ export default function Home() {
               <a key={s} href={`#${s}`} onClick={() => setMenuOpen(false)} className="hover:text-[#d4891a] transition-colors">{t.nav[s]}</a>
             ))}
             {ordersOpen
-              ? <a href={waLink} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="btn-dark text-center px-5 py-2.5 rounded-full font-semibold">{t.nav.order}</a>
+              ? <button onClick={() => { setMenuOpen(false); openOrderForm() }} className="btn-dark text-center px-5 py-2.5 rounded-full font-semibold">{t.nav.order}</button>
               : <span className="text-center px-5 py-2.5 rounded-full font-semibold bg-gray-200 text-gray-400 cursor-not-allowed">{lang==='bm'?'Ditutup':'Closed'}</span>
             }
           </div>
@@ -423,11 +645,11 @@ export default function Home() {
             <div className="animate-fade-up flex flex-col sm:flex-row gap-4 justify-center" style={{animationDelay:'0.5s'}}>
               <a href="#menu" className="btn-dark px-9 py-4 rounded-full font-semibold text-base">{t.hero.btn1}</a>
               {ordersOpen
-                ? <a href={waLink} target="_blank" rel="noopener noreferrer"
+                ? <button onClick={() => openOrderForm()}
                     className="btn-cyan bg-transparent px-9 py-4 rounded-full font-semibold text-base flex items-center justify-center gap-2">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                     {t.hero.btn2}
-                  </a>
+                  </button>
                 : <span className="border-2 border-gray-300 text-gray-400 px-9 py-4 rounded-full font-semibold text-base flex items-center justify-center gap-2 cursor-not-allowed">
                     🚫 {lang==='bm'?'Pesanan Ditutup':'Orders Closed'}
                   </span>
@@ -490,9 +712,8 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <span className="text-[#d4891a] font-bold text-lg">{item.price}</span>
                     {ordersOpen
-                      ? <a href={`https://wa.me/${BIZ.whatsapp}?text=${t.waOrder}${encodeURIComponent(item.name)}`}
-                          target="_blank" rel="noopener noreferrer"
-                          className="btn-dark text-xs font-bold px-4 py-2 rounded-full">{t.menuSection.orderBtn}</a>
+                      ? <button onClick={() => openOrderForm(item.name)}
+                          className="btn-dark text-xs font-bold px-4 py-2 rounded-full">{t.menuSection.orderBtn}</button>
                       : <span className="text-xs font-bold px-4 py-2 rounded-full bg-gray-200 text-gray-400 cursor-not-allowed">{lang==='bm'?'Tutup':'Closed'}</span>
                     }
                   </div>
@@ -583,14 +804,14 @@ export default function Home() {
             {!ordersOpen && (
               <p className="text-red-400 font-semibold mb-4 text-sm">🚫 {lang==='bm'?'Pesanan ditutup buat masa ini.':'Orders are currently closed.'}</p>
             )}
-            <a href={ordersOpen ? waLink : '#'} target={ordersOpen ? '_blank' : undefined} rel="noopener noreferrer"
-              onClick={!ordersOpen ? e => e.preventDefault() : undefined}
+            <button
+              onClick={() => ordersOpen && openOrderForm()}
               className={`inline-flex items-center gap-3 px-9 py-4 rounded-full font-bold text-base transition-all ${ordersOpen ? 'bg-[#00b4d8] hover:bg-[#009ab8] text-white hover:-translate-y-1 hover:shadow-xl' : 'bg-gray-500 text-gray-300 cursor-not-allowed opacity-60'}`}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
               </svg>
               {t.cta.btn}
-            </a>
+            </button>
           </div>
         </section>
 
