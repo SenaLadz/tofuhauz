@@ -14,6 +14,14 @@ const BIZ = {
   established: '2018',
 }
 
+// Delivery zone tiers — mirroring Grab/Panda Malaysia rates
+const DELIVERY_ZONES = [
+  { en: 'Within 3 km',    bm: 'Dalam 3 km',      fee: 4  },
+  { en: '3 km – 7 km',    bm: '3 km – 7 km',     fee: 7  },
+  { en: '7 km – 12 km',   bm: '7 km – 12 km',    fee: 10 },
+  { en: '12 km – 20 km',  bm: '12 km – 20 km',   fee: 14 },
+]
+
 const T = {
   en: {
     tagline:     'Fresh. Wholesome. Delicious.',
@@ -39,11 +47,11 @@ const T = {
       orderBtn:   'Order',
     },
     menu: [
-      { name:'Traditional Press Tofu',  desc:'Firm, dense, and ready to cook — our pressed tofu is made from pure, non-GMO soybeans with minimal moisture for a satisfying texture that holds its shape beautifully in any dish.', price:'RM 11.00 for 8 pieces', badge:'Best Seller',  badgeColor:'bg-amber-100 text-amber-700',  emoji:'🫘', image:'/image1.png' },
-      { name:'Traditional Tau Fu Fah', desc:'Silky smooth and melt-in-your-mouth tender — our Tau Fu Fah is crafted from pure, non-GMO soybeans, gently set to achieve a delicate, creamy texture that soothes with every spoonful. Served with fragrant ginger syrup or rich palm sugar syrup, it is a timeless traditional dessert that warms the heart and delights the soul.',   price:'RM 3.50 per pack', badge:'Fan Fav',      badgeColor:'bg-rose-100 text-rose-700',    emoji:'🍮', image:'/image2.png' },
-      { name:'Loaf Press Tofu',    desc:'Thick, firm, and beautifully structured — our Loaf Pressed Tofu is crafted from pure, non-GMO soybeans, pressed into a generous loaf block for maximum versatility in the kitchen. With its dense texture and low moisture content, it slices cleanly, holds its shape perfectly, and soaks up marinades and sauces like no other. Whether pan-fried, grilled, steamed, or added into hearty stews and curries, this is the go-to tofu for bold, satisfying meals.',price:'RM 6.00', badge:'Trending',        badgeColor:'bg-red-100 text-red-700',      emoji:'🥡', image:'/image3.png' },
-      { name:'Fresh Soy Water (Pack)',  desc:'Pure, refreshing, and naturally wholesome — our Fresh Soy Water is made from carefully selected, non-GMO soybeans, gently processed to preserve its natural goodness and mild, creamy flavour. Packed fresh for your convenience, it is a clean and nourishing plant-based drink that is free from artificial additives, perfect for the whole family to enjoy any time of the day.',        price:'RM 6.00', badge:'Local Twist',  badgeColor:'bg-yellow-100 text-yellow-700',emoji:'🧃', image:'/image4.png' },
-      { name:'Fresh Soy Water (Bottle)',        desc:'Pure, refreshing, and naturally wholesome — our Fresh Soy Water comes in a handy bottle, made from carefully selected, non-GMO soybeans, gently processed to preserve its natural goodness and mild, creamy flavour. Grab and go, sip and savour — a clean, nourishing plant-based drink with no artificial additives, perfect for a healthy lifestyle on the move.',        price:'RM 2.00', badge:'Signature',    badgeColor:'bg-cyan-100 text-cyan-700',    emoji:'🍶', image:'/image5.png' },
+      { name:'Traditional Press Tofu',   basePrice:11,  desc:'Firm, dense, and ready to cook — our pressed tofu is made from pure, non-GMO soybeans with minimal moisture for a satisfying texture that holds its shape beautifully in any dish.',                                                                                                                                                                                                                                                                                                                                         price:'RM 11.00 for 8 pieces', badge:'Best Seller',        badgeColor:'bg-amber-100 text-amber-700',  emoji:'🫘', image:'/image1.png' },
+      { name:'Traditional Tau Fu Fah',   basePrice:3.5, desc:'Silky smooth and melt-in-your-mouth tender — our Tau Fu Fah is crafted from pure, non-GMO soybeans, gently set to achieve a delicate, creamy texture that soothes with every spoonful. Served with fragrant ginger syrup or rich palm sugar syrup, it is a timeless traditional dessert that warms the heart and delights the soul.',                                                                                                                                                                                           price:'RM 3.50 per pack',      badge:'Fan Fav',            badgeColor:'bg-rose-100 text-rose-700',    emoji:'🍮', image:'/image2.png' },
+      { name:'Loaf Press Tofu',          basePrice:6,   desc:'Thick, firm, and beautifully structured — our Loaf Pressed Tofu is crafted from pure, non-GMO soybeans, pressed into a generous loaf block for maximum versatility in the kitchen. With its dense texture and low moisture content, it slices cleanly, holds its shape perfectly, and soaks up marinades and sauces like no other. Whether pan-fried, grilled, steamed, or added into hearty stews and curries, this is the go-to tofu for bold, satisfying meals.',                                                              price:'RM 6.00',               badge:'Trending',           badgeColor:'bg-red-100 text-red-700',      emoji:'🥡', image:'/image3.png' },
+      { name:'Fresh Soy Water (Pack)',   basePrice:6,   desc:'Pure, refreshing, and naturally wholesome — our Fresh Soy Water is made from carefully selected, non-GMO soybeans, gently processed to preserve its natural goodness and mild, creamy flavour. Packed fresh for your convenience, it is a clean and nourishing plant-based drink that is free from artificial additives, perfect for the whole family to enjoy any time of the day.',                                                                                                                                                price:'RM 6.00',               badge:'Local Twist',        badgeColor:'bg-yellow-100 text-yellow-700',emoji:'🧃', image:'/image4.png' },
+      { name:'Fresh Soy Water (Bottle)', basePrice:2,   desc:'Pure, refreshing, and naturally wholesome — our Fresh Soy Water comes in a handy bottle, made from carefully selected, non-GMO soybeans, gently processed to preserve its natural goodness and mild, creamy flavour. Grab and go, sip and savour — a clean, nourishing plant-based drink with no artificial additives, perfect for a healthy lifestyle on the move.',                                                                                                                                                           price:'RM 2.00',               badge:'Signature',          badgeColor:'bg-cyan-100 text-cyan-700',    emoji:'🍶', image:'/image5.png' },
     ],
     about: {
       label:   'Our Story',
@@ -78,20 +86,27 @@ const T = {
     footer: { rights: `© ${new Date().getFullYear()} Tofu Hauz. All rights reserved.` },
     waMsg:   "Hi%20Tofu%20Hauz!%20I'd%20like%20to%20place%20an%20order%20%F0%9F%8D%BD%EF%B8%8F",
     orderForm: {
-      title:      'Place Your Order',
-      name:       'Your Name',       namePh:    'e.g. Ahmad',
-      phone:      'Phone Number',    phonePh:   'e.g. 011-1234 5678',
-      type:       'Order Type',
-      pickup:     '🏠 Pick-up',     delivery:  '🛵 Delivery',
-      address:    'Delivery Address',addressPh: 'Full address for delivery...',
-      items:      'Select Items',
-      notes:      'Notes / Special Requests', notesPh: 'Allergies, spice level, extra items...',
-      confirm:    'Confirm Order via WhatsApp',
-      cancel:     'Cancel',
-      errName:    'Please enter your name.',
-      errPhone:   'Please enter your phone number.',
-      errItems:   'Please select at least one item.',
-      errAddress: 'Please enter your delivery address.',
+      title:        'Place Your Order',
+      name:         'Your Name',          namePh:     'e.g. Ahmad',
+      phone:        'Phone Number',       phonePh:    'e.g. 011-1234 5678',
+      type:         'Order Type',
+      pickup:       '🏠 Pick-up',         delivery:   '🛵 Delivery',
+      address:      'Delivery Address',   addressPh:  'Full address for delivery...',
+      zone:         'Distance from Nilai',
+      zonePh:       'Select your distance zone',
+      items:        'Select Items',
+      notes:        'Notes / Special Requests', notesPh: 'Allergies, spice level, extra items...',
+      subtotal:     'Subtotal',
+      deliveryFee:  'Delivery Fee',
+      free:         'FREE',
+      total:        'Total',
+      confirm:      'Confirm Order via WhatsApp',
+      cancel:       'Cancel',
+      errName:      'Please enter your name.',
+      errPhone:     'Please enter your phone number.',
+      errItems:     'Please select at least one item.',
+      errAddress:   'Please enter your delivery address.',
+      errZone:      'Please select your distance zone.',
     },
   },
   bm: {
@@ -118,11 +133,11 @@ const T = {
       orderBtn:   'Pesan',
     },
     menu: [
-      { name:'Tauhu Press Tradisional',  desc:'Padat, kenyal, dan sedia untuk dimasak — tauhu press kami diperbuat daripada kacang soya tulen tanpa GMO dengan kandungan air yang rendah, menghasilkan tekstur yang memuaskan dan mengekalkan bentuknya dengan sempurna dalam setiap hidangan.',                                                                                                                                                                                                                                                                                                price:'RM 11.00 untuk 8 ketul', badge:'Terlaris',          badgeColor:'bg-amber-100 text-amber-700',  emoji:'🫘', image:'/image1.png' },
-      { name:'Tau Fu Fah Tradisional', desc:'Lembut, licin, dan cair di mulut — Tau Fu Fah kami dibuat daripada kacang soya tulen tanpa GMO, diset dengan teliti untuk menghasilkan tekstur yang halus dan berkrim yang menenangkan dengan setiap suapan. Dihidangkan dengan sirap halia yang wangi atau sirap gula merah yang kaya, ia adalah pencuci mulut tradisional yang abadi yang menghangatkan hati dan menyukakan jiwa.',                                                                                                                                                                   price:'RM 3.50 setiap pek',     badge:'Kegemaran',         badgeColor:'bg-rose-100 text-rose-700',    emoji:'🍮', image:'/image2.png' },
-      { name:'Tauhu Press Loaf',       desc:'Tebal, padat, dan berstruktur indah — Tauhu Press Loaf kami dibuat daripada kacang soya tulen tanpa GMO, ditekan ke dalam blok loaf yang besar untuk fleksibiliti maksimum di dapur. Dengan teksturnya yang padat dan kandungan air yang rendah, ia dipotong dengan bersih, mengekalkan bentuknya dengan sempurna, dan menyerap marinasi dan sos seperti tiada yang lain. Sama ada digoreng, dibakar, dikukus, atau ditambah ke dalam rebusan dan kari yang sedap, ini adalah tauhu pilihan untuk hidangan yang berani dan memuaskan.', price:'RM 6.00',                badge:'Trending',          badgeColor:'bg-red-100 text-red-700',      emoji:'🥡', image:'/image3.png' },
-      { name:'Air Soya Segar (Pek)',   desc:'Tulen, menyegarkan, dan semulajadi berkhasiat — Air Soya Segar kami dibuat daripada kacang soya terpilih tanpa GMO, diproses dengan lembut untuk mengekalkan kebaikan semulajadi dan rasa ringan yang berkrim. Dikemas segar untuk kemudahan anda, ia adalah minuman berasaskan tumbuhan yang bersih dan berkhasiat tanpa bahan tambahan buatan, sesuai untuk seluruh keluarga menikmati pada bila-bila masa.',                                                                                                                              price:'RM 6.00',                badge:'Sentuhan Tempatan', badgeColor:'bg-yellow-100 text-yellow-700',emoji:'🧃', image:'/image4.png' },
-      { name:'Air Soya Segar (Botol)', desc:'Tulen, menyegarkan, dan semulajadi berkhasiat — Air Soya Segar kami hadir dalam botol yang mudah, dibuat daripada kacang soya terpilih tanpa GMO, diproses dengan lembut untuk mengekalkan kebaikan semulajadi dan rasa ringan yang berkrim. Ambil dan pergi, teguk dan nikmati — minuman berasaskan tumbuhan yang bersih dan berkhasiat tanpa bahan tambahan buatan, sesuai untuk gaya hidup sihat yang aktif.',                                                                                                                            price:'RM 2.00',                badge:'Signature',         badgeColor:'bg-cyan-100 text-cyan-700',    emoji:'🍶', image:'/image5.png' },
+      { name:'Tauhu Press Tradisional',  basePrice:11,  desc:'Padat, kenyal, dan sedia untuk dimasak — tauhu press kami diperbuat daripada kacang soya tulen tanpa GMO dengan kandungan air yang rendah, menghasilkan tekstur yang memuaskan dan mengekalkan bentuknya dengan sempurna dalam setiap hidangan.',                                                                                                                                                                                                                                                                                                price:'RM 11.00 untuk 8 ketul', badge:'Terlaris',          badgeColor:'bg-amber-100 text-amber-700',  emoji:'🫘', image:'/image1.png' },
+      { name:'Tau Fu Fah Tradisional',   basePrice:3.5, desc:'Lembut, licin, dan cair di mulut — Tau Fu Fah kami dibuat daripada kacang soya tulen tanpa GMO, diset dengan teliti untuk menghasilkan tekstur yang halus dan berkrim yang menenangkan dengan setiap suapan. Dihidangkan dengan sirap halia yang wangi atau sirap gula merah yang kaya, ia adalah pencuci mulut tradisional yang abadi yang menghangatkan hati dan menyukakan jiwa.',                                                                                                                                                                   price:'RM 3.50 setiap pek',     badge:'Kegemaran',         badgeColor:'bg-rose-100 text-rose-700',    emoji:'🍮', image:'/image2.png' },
+      { name:'Tauhu Press Loaf',         basePrice:6,   desc:'Tebal, padat, dan berstruktur indah — Tauhu Press Loaf kami dibuat daripada kacang soya tulen tanpa GMO, ditekan ke dalam blok loaf yang besar untuk fleksibiliti maksimum di dapur. Dengan teksturnya yang padat dan kandungan air yang rendah, ia dipotong dengan bersih, mengekalkan bentuknya dengan sempurna, dan menyerap marinasi dan sos seperti tiada yang lain. Sama ada digoreng, dibakar, dikukus, atau ditambah ke dalam rebusan dan kari yang sedap, ini adalah tauhu pilihan untuk hidangan yang berani dan memuaskan.', price:'RM 6.00',                badge:'Trending',          badgeColor:'bg-red-100 text-red-700',      emoji:'🥡', image:'/image3.png' },
+      { name:'Air Soya Segar (Pek)',     basePrice:6,   desc:'Tulen, menyegarkan, dan semulajadi berkhasiat — Air Soya Segar kami dibuat daripada kacang soya terpilih tanpa GMO, diproses dengan lembut untuk mengekalkan kebaikan semulajadi dan rasa ringan yang berkrim. Dikemas segar untuk kemudahan anda, ia adalah minuman berasaskan tumbuhan yang bersih dan berkhasiat tanpa bahan tambahan buatan, sesuai untuk seluruh keluarga menikmati pada bila-bila masa.',                                                                                                                              price:'RM 6.00',                badge:'Sentuhan Tempatan', badgeColor:'bg-yellow-100 text-yellow-700',emoji:'🧃', image:'/image4.png' },
+      { name:'Air Soya Segar (Botol)',   basePrice:2,   desc:'Tulen, menyegarkan, dan semulajadi berkhasiat — Air Soya Segar kami hadir dalam botol yang mudah, dibuat daripada kacang soya terpilih tanpa GMO, diproses dengan lembut untuk mengekalkan kebaikan semulajadi dan rasa ringan yang berkrim. Ambil dan pergi, teguk dan nikmati — minuman berasaskan tumbuhan yang bersih dan berkhasiat tanpa bahan tambahan buatan, sesuai untuk gaya hidup sihat yang aktif.',                                                                                                                            price:'RM 2.00',                badge:'Signature',         badgeColor:'bg-cyan-100 text-cyan-700',    emoji:'🍶', image:'/image5.png' },
     ],
     about: {
       label:   'Kisah Kami',
@@ -157,20 +172,27 @@ const T = {
     footer: { rights: `© ${new Date().getFullYear()} Tofu Hauz. Hak cipta terpelihara.` },
     waMsg:   "Hai%20Tofu%20Hauz!%20Saya%20ingin%20membuat%20pesanan%20%F0%9F%8D%BD%EF%B8%8F",
     orderForm: {
-      title:      'Buat Pesanan Anda',
-      name:       'Nama Anda',             namePh:    'cth. Ahmad',
-      phone:      'Nombor Telefon',        phonePh:   'cth. 011-1234 5678',
-      type:       'Jenis Pesanan',
-      pickup:     '🏠 Ambil Sendiri',      delivery:  '🛵 Penghantaran',
-      address:    'Alamat Penghantaran',   addressPh: 'Alamat penuh untuk penghantaran...',
-      items:      'Pilih Item',
-      notes:      'Nota / Permintaan Khas', notesPh:  'Alahan, tahap pedas, item tambahan...',
-      confirm:    'Sahkan Pesanan via WhatsApp',
-      cancel:     'Batal',
-      errName:    'Sila masukkan nama anda.',
-      errPhone:   'Sila masukkan nombor telefon anda.',
-      errItems:   'Sila pilih sekurang-kurangnya satu item.',
-      errAddress: 'Sila masukkan alamat penghantaran anda.',
+      title:        'Buat Pesanan Anda',
+      name:         'Nama Anda',                 namePh:    'cth. Ahmad',
+      phone:        'Nombor Telefon',            phonePh:   'cth. 011-1234 5678',
+      type:         'Jenis Pesanan',
+      pickup:       '🏠 Ambil Sendiri',          delivery:  '🛵 Penghantaran',
+      address:      'Alamat Penghantaran',       addressPh: 'Alamat penuh untuk penghantaran...',
+      zone:         'Jarak dari Nilai',
+      zonePh:       'Pilih zon jarak anda',
+      items:        'Pilih Item',
+      notes:        'Nota / Permintaan Khas',    notesPh:   'Alahan, tahap pedas, item tambahan...',
+      subtotal:     'Subtotal',
+      deliveryFee:  'Yuran Penghantaran',
+      free:         'PERCUMA',
+      total:        'Jumlah',
+      confirm:      'Sahkan Pesanan via WhatsApp',
+      cancel:       'Batal',
+      errName:      'Sila masukkan nama anda.',
+      errPhone:     'Sila masukkan nombor telefon anda.',
+      errItems:     'Sila pilih sekurang-kurangnya satu item.',
+      errAddress:   'Sila masukkan alamat penghantaran anda.',
+      errZone:      'Sila pilih zon jarak anda.',
     },
   },
 }
@@ -198,6 +220,7 @@ export default function Home() {
   const [orderPhone,     setOrderPhone]     = useState('')
   const [orderType,      setOrderType]      = useState<'pickup'|'delivery'>('pickup')
   const [orderAddress,   setOrderAddress]   = useState('')
+  const [orderZone,      setOrderZone]      = useState<number|null>(null)
   const [orderNotes,     setOrderNotes]     = useState('')
   const [orderItems,     setOrderItems]     = useState<Record<string,number>>({})
   const [orderError,     setOrderError]     = useState('')
@@ -207,6 +230,16 @@ export default function Home() {
 
   const t = T[lang]
   const waLink = `https://wa.me/${BIZ.whatsapp}?text=${t.waMsg}`
+
+  // Derived order totals
+  const subtotal = Object.entries(orderItems)
+    .filter(([, q]) => q > 0)
+    .reduce((sum, [name, qty]) => {
+      const item = t.menu.find(m => m.name === name)
+      return sum + (item ? item.basePrice * qty : 0)
+    }, 0)
+  const deliveryFee = orderType === 'delivery' && orderZone !== null ? DELIVERY_ZONES[orderZone].fee : 0
+  const total = subtotal + deliveryFee
 
   // Load persisted state
   useEffect(() => {
@@ -251,6 +284,7 @@ export default function Home() {
     setOrderPhone('')
     setOrderType('pickup')
     setOrderAddress('')
+    setOrderZone(null)
     setOrderNotes('')
     setOrderError('')
     setShowOrderForm(true)
@@ -263,19 +297,31 @@ export default function Home() {
     const selected = Object.entries(orderItems).filter(([, q]) => q > 0)
     if (!selected.length)   { setOrderError(of.errItems);   return }
     if (orderType === 'delivery' && !orderAddress.trim()) { setOrderError(of.errAddress); return }
+    if (orderType === 'delivery' && orderZone === null)   { setOrderError(of.errZone);    return }
 
-    const itemLines = selected.map(([name, qty]) => `  • ${name} x${qty}`).join('\n')
+    const itemLines = selected.map(([name, qty]) => {
+      const item = t.menu.find(m => m.name === name)
+      const lineTotal = item ? item.basePrice * qty : 0
+      return `  • ${name} x${qty}  (RM ${lineTotal.toFixed(2)})`
+    }).join('\n')
+
     const typeLabel = orderType === 'pickup'
       ? (lang === 'bm' ? 'Ambil Sendiri' : 'Pick-up')
       : (lang === 'bm' ? 'Penghantaran'  : 'Delivery')
+    const zone = orderType === 'delivery' && orderZone !== null ? DELIVERY_ZONES[orderZone] : null
+    const zoneLabel = zone ? (lang === 'bm' ? zone.bm : zone.en) : ''
     const addrLine = orderType === 'delivery'
-      ? `\n📍 *${lang === 'bm' ? 'Alamat' : 'Address'}:* ${orderAddress}` : ''
+      ? `\n📍 *${lang === 'bm' ? 'Alamat' : 'Address'}:* ${orderAddress}\n📏 *${lang === 'bm' ? 'Zon' : 'Zone'}:* ${zoneLabel}` : ''
     const noteLine = orderNotes.trim()
       ? `\n📝 *${lang === 'bm' ? 'Nota' : 'Notes'}:* ${orderNotes}` : ''
+    const subtotalLabel = lang === 'bm' ? 'Subtotal' : 'Subtotal'
+    const feeLabel      = lang === 'bm' ? 'Yuran Penghantaran' : 'Delivery Fee'
+    const totalLabel    = lang === 'bm' ? 'Jumlah' : 'Total'
+    const feeStr = orderType === 'delivery' && zone ? `RM ${zone.fee.toFixed(2)}` : (lang === 'bm' ? 'Percuma' : 'FREE')
 
     const msg = lang === 'bm'
-      ? `Hai Tofu Hauz! Saya ingin membuat pesanan 🍽️\n\n👤 *Nama:* ${orderName}\n📱 *Telefon:* ${orderPhone}\n🚗 *Jenis:* ${typeLabel}${addrLine}\n\n🛒 *Pesanan:*\n${itemLines}${noteLine}`
-      : `Hi Tofu Hauz! I'd like to place an order 🍽️\n\n👤 *Name:* ${orderName}\n📱 *Phone:* ${orderPhone}\n🚗 *Type:* ${typeLabel}${addrLine}\n\n🛒 *Order:*\n${itemLines}${noteLine}`
+      ? `Hai Tofu Hauz! Saya ingin membuat pesanan 🍽️\n\n👤 *Nama:* ${orderName}\n📱 *Telefon:* ${orderPhone}\n🚗 *Jenis:* ${typeLabel}${addrLine}\n\n🛒 *Pesanan:*\n${itemLines}\n\n💰 *${subtotalLabel}:* RM ${subtotal.toFixed(2)}\n🛵 *${feeLabel}:* ${feeStr}\n✅ *${totalLabel}:* RM ${total.toFixed(2)}${noteLine}`
+      : `Hi Tofu Hauz! I'd like to place an order 🍽️\n\n👤 *Name:* ${orderName}\n📱 *Phone:* ${orderPhone}\n🚗 *Type:* ${typeLabel}${addrLine}\n\n🛒 *Order:*\n${itemLines}\n\n💰 *${subtotalLabel}:* RM ${subtotal.toFixed(2)}\n🛵 *${feeLabel}:* ${feeStr}\n✅ *${totalLabel}:* RM ${total.toFixed(2)}${noteLine}`
 
     window.open(`https://wa.me/${BIZ.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank')
     setShowOrderForm(false)
@@ -382,6 +428,7 @@ export default function Home() {
       {showOrderForm && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col" style={{maxHeight:'90vh'}}>
+
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-amber-100 shrink-0">
               <div>
@@ -400,56 +447,66 @@ export default function Home() {
               {/* Name */}
               <div>
                 <label className="block text-xs font-bold text-[#2c1a0e] mb-1.5 uppercase tracking-wide">{t.orderForm.name}</label>
-                <input
-                  value={orderName}
-                  onChange={e => { setOrderName(e.target.value); setOrderError('') }}
+                <input value={orderName} onChange={e => { setOrderName(e.target.value); setOrderError('') }}
                   placeholder={t.orderForm.namePh}
-                  className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors"
-                />
+                  className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors" />
               </div>
 
               {/* Phone */}
               <div>
                 <label className="block text-xs font-bold text-[#2c1a0e] mb-1.5 uppercase tracking-wide">{t.orderForm.phone}</label>
-                <input
-                  type="tel"
-                  value={orderPhone}
-                  onChange={e => { setOrderPhone(e.target.value); setOrderError('') }}
+                <input type="tel" value={orderPhone} onChange={e => { setOrderPhone(e.target.value); setOrderError('') }}
                   placeholder={t.orderForm.phonePh}
-                  className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors"
-                />
+                  className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors" />
               </div>
 
-              {/* Order Type toggle */}
+              {/* Order Type */}
               <div>
                 <label className="block text-xs font-bold text-[#2c1a0e] mb-2 uppercase tracking-wide">{t.orderForm.type}</label>
                 <div className="flex gap-3">
                   {(['pickup', 'delivery'] as const).map(ot => (
-                    <button key={ot}
-                      onClick={() => { setOrderType(ot); setOrderError('') }}
+                    <button key={ot} onClick={() => { setOrderType(ot); setOrderZone(null); setOrderError('') }}
                       className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${
-                        orderType === ot
-                          ? 'border-[#d4891a] bg-amber-50 text-[#d4891a]'
-                          : 'border-amber-100 text-[#7a4a28] hover:border-amber-200'
-                      }`}>
+                        orderType === ot ? 'border-[#d4891a] bg-amber-50 text-[#d4891a]' : 'border-amber-100 text-[#7a4a28] hover:border-amber-200'}`}>
                       {ot === 'pickup' ? t.orderForm.pickup : t.orderForm.delivery}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Delivery address (conditional) */}
+              {/* Delivery-only fields */}
               {orderType === 'delivery' && (
-                <div>
-                  <label className="block text-xs font-bold text-[#2c1a0e] mb-1.5 uppercase tracking-wide">{t.orderForm.address}</label>
-                  <textarea
-                    value={orderAddress}
-                    onChange={e => { setOrderAddress(e.target.value); setOrderError('') }}
-                    placeholder={t.orderForm.addressPh}
-                    rows={3}
-                    className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors resize-none"
-                  />
-                </div>
+                <>
+                  {/* Delivery address */}
+                  <div>
+                    <label className="block text-xs font-bold text-[#2c1a0e] mb-1.5 uppercase tracking-wide">{t.orderForm.address}</label>
+                    <textarea value={orderAddress} onChange={e => { setOrderAddress(e.target.value); setOrderError('') }}
+                      placeholder={t.orderForm.addressPh} rows={3}
+                      className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors resize-none" />
+                  </div>
+
+                  {/* Distance zone */}
+                  <div>
+                    <label className="block text-xs font-bold text-[#2c1a0e] mb-2 uppercase tracking-wide">{t.orderForm.zone}</label>
+                    <div className="space-y-2">
+                      {DELIVERY_ZONES.map((z, i) => (
+                        <button key={i} onClick={() => { setOrderZone(i); setOrderError('') }}
+                          className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all ${
+                            orderZone === i ? 'border-[#d4891a] bg-amber-50' : 'border-amber-100 hover:border-amber-200'}`}>
+                          <span className={orderZone === i ? 'text-[#d4891a]' : 'text-[#2c1a0e]'}>
+                            {lang === 'bm' ? z.bm : z.en}
+                          </span>
+                          <span className={`font-bold ${orderZone === i ? 'text-[#d4891a]' : 'text-[#7a4a28]'}`}>
+                            RM {z.fee.toFixed(2)}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-[#7a4a28]/60 mt-1.5">
+                      {lang === 'bm' ? '* Kadar penghantaran mengikut anggaran Grab/Panda' : '* Delivery rates based on Grab/Panda estimates'}
+                    </p>
+                  </div>
+                </>
               )}
 
               {/* Items */}
@@ -467,17 +524,11 @@ export default function Home() {
                           <p className="text-xs text-[#d4891a] font-medium">{item.price}</p>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
-                          <button
-                            onClick={() => { setOrderItems(prev => ({ ...prev, [item.name]: Math.max(0, (prev[item.name]||0) - 1) })); setOrderError('') }}
-                            className="w-7 h-7 rounded-full border-2 border-amber-200 text-[#7a4a28] font-bold text-sm hover:border-[#d4891a] hover:text-[#d4891a] transition-all flex items-center justify-center">
-                            −
-                          </button>
+                          <button onClick={() => { setOrderItems(prev => ({ ...prev, [item.name]: Math.max(0, (prev[item.name]||0) - 1) })); setOrderError('') }}
+                            className="w-7 h-7 rounded-full border-2 border-amber-200 text-[#7a4a28] font-bold text-sm hover:border-[#d4891a] hover:text-[#d4891a] transition-all flex items-center justify-center">−</button>
                           <span className="w-5 text-center text-sm font-bold text-[#2c1a0e]">{qty}</span>
-                          <button
-                            onClick={() => { setOrderItems(prev => ({ ...prev, [item.name]: (prev[item.name]||0) + 1 })); setOrderError('') }}
-                            className="w-7 h-7 rounded-full border-2 border-amber-200 text-[#7a4a28] font-bold text-sm hover:border-[#d4891a] hover:text-[#d4891a] transition-all flex items-center justify-center">
-                            +
-                          </button>
+                          <button onClick={() => { setOrderItems(prev => ({ ...prev, [item.name]: (prev[item.name]||0) + 1 })); setOrderError('') }}
+                            className="w-7 h-7 rounded-full border-2 border-amber-200 text-[#7a4a28] font-bold text-sm hover:border-[#d4891a] hover:text-[#d4891a] transition-all flex items-center justify-center">+</button>
                         </div>
                       </div>
                     )
@@ -487,20 +538,51 @@ export default function Home() {
 
               {/* Notes */}
               <div>
-                <label className="block text-xs font-bold text-[#2c1a0e] mb-1.5 uppercase tracking-wide">{t.orderForm.notes} <span className="text-gray-400 normal-case font-normal">(optional)</span></label>
-                <textarea
-                  value={orderNotes}
-                  onChange={e => setOrderNotes(e.target.value)}
-                  placeholder={t.orderForm.notesPh}
-                  rows={2}
-                  className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors resize-none"
-                />
+                <label className="block text-xs font-bold text-[#2c1a0e] mb-1.5 uppercase tracking-wide">
+                  {t.orderForm.notes} <span className="text-gray-400 normal-case font-normal">(optional)</span>
+                </label>
+                <textarea value={orderNotes} onChange={e => setOrderNotes(e.target.value)}
+                  placeholder={t.orderForm.notesPh} rows={2}
+                  className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors resize-none" />
+              </div>
+
+              {/* Order summary */}
+              <div className="rounded-2xl overflow-hidden border-2 border-amber-100">
+                <div className="bg-amber-50 px-4 py-2 border-b border-amber-100">
+                  <p className="text-xs font-bold text-[#2c1a0e] uppercase tracking-wide">
+                    {lang === 'bm' ? 'Ringkasan Pesanan' : 'Order Summary'}
+                  </p>
+                </div>
+                <div className="px-4 py-3 space-y-2">
+                  <div className="flex justify-between text-sm text-[#7a4a28]">
+                    <span>{t.orderForm.subtotal}</span>
+                    <span className="font-semibold text-[#2c1a0e]">RM {subtotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm text-[#7a4a28]">
+                    <span>{t.orderForm.deliveryFee}</span>
+                    <span className={`font-semibold ${orderType === 'pickup' ? 'text-green-600' : 'text-[#2c1a0e]'}`}>
+                      {orderType === 'pickup'
+                        ? t.orderForm.free
+                        : orderZone !== null
+                          ? `RM ${DELIVERY_ZONES[orderZone].fee.toFixed(2)}`
+                          : '—'}
+                    </span>
+                  </div>
+                  <div className="border-t border-amber-100 pt-2 flex justify-between">
+                    <span className="font-bold text-[#2c1a0e]">{t.orderForm.total}</span>
+                    <span className="font-bold text-lg text-[#d4891a]">
+                      {orderType === 'delivery' && orderZone === null
+                        ? `RM ${subtotal.toFixed(2)} + ${lang === 'bm' ? 'yuran' : 'fee'}`
+                        : `RM ${total.toFixed(2)}`}
+                    </span>
+                  </div>
+                </div>
               </div>
 
               {/* Validation error */}
               {orderError && (
                 <p className="text-red-500 text-sm font-medium flex items-center gap-1.5">
-                  <span>⚠️</span> {orderError}
+                  ⚠️ {orderError}
                 </p>
               )}
             </div>
@@ -529,8 +611,7 @@ export default function Home() {
           <p className="text-amber-300 text-xs font-bold uppercase tracking-widest mb-3">Admin Panel</p>
           <div className="flex items-center justify-between mb-4">
             <span className="text-sm font-semibold">{lang === 'bm' ? 'Status Pesanan' : 'Order Status'}</span>
-            <button
-              onClick={() => setOrdersOpen(o => !o)}
+            <button onClick={() => setOrdersOpen(o => !o)}
               className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${ordersOpen ? 'bg-green-500' : 'bg-red-500'}`}>
               <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-300 ${ordersOpen ? 'left-7' : 'left-1'}`} />
             </button>
@@ -570,9 +651,7 @@ export default function Home() {
               ? <button onClick={() => openOrderForm()} className="btn-dark px-5 py-2 rounded-full text-sm font-semibold">{t.nav.order}</button>
               : <span className="px-5 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-400 cursor-not-allowed">{lang==='bm'?'Ditutup':'Closed'}</span>
             }
-            {/* Language toggle */}
-            <button
-              onClick={() => setLang(l => l === 'en' ? 'bm' : 'en')}
+            <button onClick={() => setLang(l => l === 'en' ? 'bm' : 'en')}
               className="flex items-center gap-1 border-2 border-[#2c1a0e]/20 rounded-full px-3 py-1.5 text-xs font-bold tracking-wider hover:border-[#d4891a] transition-all"
               aria-label="Toggle language">
               <span className={lang === 'en' ? 'text-[#d4891a]' : 'text-[#2c1a0e]/40'}>EN</span>
@@ -581,9 +660,7 @@ export default function Home() {
             </button>
           </div>
           <div className="flex items-center gap-3 md:hidden">
-            {/* Mobile language toggle */}
-            <button
-              onClick={() => setLang(l => l === 'en' ? 'bm' : 'en')}
+            <button onClick={() => setLang(l => l === 'en' ? 'bm' : 'en')}
               className="flex items-center gap-1 border-2 border-[#2c1a0e]/20 rounded-full px-2.5 py-1 text-xs font-bold"
               aria-label="Toggle language">
               <span className={lang === 'en' ? 'text-[#d4891a]' : 'text-[#2c1a0e]/40'}>EN</span>
@@ -619,18 +696,11 @@ export default function Home() {
           <div className="warm-blob blob-green w-[300px] h-[300px] absolute top-[40%] left-[5%]" style={{zIndex:1}} />
           <span className="absolute top-28 left-6 text-8xl opacity-[0.07] animate-sway select-none pointer-events-none" style={{zIndex:1}}>🫘</span>
           <span className="absolute bottom-20 right-8 text-9xl opacity-[0.06] animate-float select-none pointer-events-none" style={{zIndex:1,animationDelay:'1.5s'}}>🫘</span>
-
           <div className="relative max-w-3xl mx-auto text-center" style={{zIndex:2}}>
             <div className="animate-fade-up mb-5" style={{animationDelay:'0.1s'}}>
               {!logoErr
                 ? <img src="/logo.png" alt="Tofu Hauz" className="h-48 md:h-60 w-auto mx-auto drop-shadow-xl" onError={() => setLogoErr(true)} />
-                : (
-                  <>
-                    <div className="text-7xl mb-3 animate-float">🫘</div>
-                    <h1 className="brand-name text-8xl md:text-[110px] text-[#2c1a0e] leading-none"
-                      style={{textShadow:'4px 4px 0 rgba(0,180,216,0.12)'}}>TOFU HAUZ</h1>
-                  </>
-                )
+                : (<><div className="text-7xl mb-3 animate-float">🫘</div><h1 className="brand-name text-8xl md:text-[110px] text-[#2c1a0e] leading-none" style={{textShadow:'4px 4px 0 rgba(0,180,216,0.12)'}}>TOFU HAUZ</h1></>)
               }
             </div>
             <div className="animate-fade-up mb-5" style={{animationDelay:'0.2s'}}>
@@ -657,9 +727,7 @@ export default function Home() {
             </div>
           </div>
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-[#d4891a]/50" style={{zIndex:2}}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 5v14M5 12l7 7 7-7"/>
-            </svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
           </div>
         </section>
 
@@ -703,20 +771,20 @@ export default function Home() {
                     </div>
                   )}
                   <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-4xl">{item.emoji}</span>
-                    <span className={`menu-badge ${item.badgeColor}`}>{item.badge}</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-[#2c1a0e] mb-2">{item.name}</h3>
-                  <p className="text-[#7a4a28] text-sm leading-relaxed mb-5">{item.desc}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#d4891a] font-bold text-lg">{item.price}</span>
-                    {ordersOpen
-                      ? <button onClick={() => openOrderForm(item.name)}
-                          className="btn-dark text-xs font-bold px-4 py-2 rounded-full">{t.menuSection.orderBtn}</button>
-                      : <span className="text-xs font-bold px-4 py-2 rounded-full bg-gray-200 text-gray-400 cursor-not-allowed">{lang==='bm'?'Tutup':'Closed'}</span>
-                    }
-                  </div>
+                    <div className="flex justify-between items-start mb-4">
+                      <span className="text-4xl">{item.emoji}</span>
+                      <span className={`menu-badge ${item.badgeColor}`}>{item.badge}</span>
+                    </div>
+                    <h3 className="text-lg font-bold text-[#2c1a0e] mb-2">{item.name}</h3>
+                    <p className="text-[#7a4a28] text-sm leading-relaxed mb-5">{item.desc}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#d4891a] font-bold text-lg">{item.price}</span>
+                      {ordersOpen
+                        ? <button onClick={() => openOrderForm(item.name)}
+                            className="btn-dark text-xs font-bold px-4 py-2 rounded-full">{t.menuSection.orderBtn}</button>
+                        : <span className="text-xs font-bold px-4 py-2 rounded-full bg-gray-200 text-gray-400 cursor-not-allowed">{lang==='bm'?'Tutup':'Closed'}</span>
+                      }
+                    </div>
                   </div>
                 </div>
               ))}
@@ -804,8 +872,7 @@ export default function Home() {
             {!ordersOpen && (
               <p className="text-red-400 font-semibold mb-4 text-sm">🚫 {lang==='bm'?'Pesanan ditutup buat masa ini.':'Orders are currently closed.'}</p>
             )}
-            <button
-              onClick={() => ordersOpen && openOrderForm()}
+            <button onClick={() => ordersOpen && openOrderForm()}
               className={`inline-flex items-center gap-3 px-9 py-4 rounded-full font-bold text-base transition-all ${ordersOpen ? 'bg-[#00b4d8] hover:bg-[#009ab8] text-white hover:-translate-y-1 hover:shadow-xl' : 'bg-gray-500 text-gray-300 cursor-not-allowed opacity-60'}`}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -824,7 +891,6 @@ export default function Home() {
               <div className="section-divider" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Location card with navigation buttons */}
               <div className="warm-card rounded-2xl p-8 text-center">
                 <div className="text-4xl mb-4">📍</div>
                 <h3 className="font-bold text-[#2c1a0e] mb-3 text-lg">{t.contact.location}</h3>
@@ -846,10 +912,9 @@ export default function Home() {
                   </a>
                 </div>
               </div>
-              {/* Hours and contact cards */}
               {[
-                { icon:'🕐', title:t.contact.hours,    lines:[t.contact.weekday, t.contact.weekend] },
-                { icon:'📬', title:t.contact.touch,    lines:[BIZ.phone, BIZ.email] },
+                { icon:'🕐', title:t.contact.hours, lines:[t.contact.weekday, t.contact.weekend] },
+                { icon:'📬', title:t.contact.touch, lines:[BIZ.phone, BIZ.email] },
               ].map((b) => (
                 <div key={b.title} className="warm-card rounded-2xl p-8 text-center">
                   <div className="text-4xl mb-4">{b.icon}</div>
