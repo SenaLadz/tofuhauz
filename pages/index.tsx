@@ -125,6 +125,16 @@ const T = {
       errAddress:     'Please enter your delivery address.',
       errDistance:    'Please wait for distance calculation to complete.',
       errTooFar:      `Your address is outside our delivery range (max ${MAX_DELIVERY_KM} km). Please contact us directly.`,
+      errPayment:     'Please select a payment method.',
+      errPayRef:      'Please enter your transaction reference number.',
+      payStep:        'Payment',
+      payNow:         '💳 Pay Now  (DuitNow / TnG)',
+      payLater:       '💵 Pay on Pickup / Delivery  (Cash)',
+      payNowInstr:    'Scan the QR code with your banking app or Touch \'n Go, then enter the transaction reference below.',
+      payRef:         'Transaction Reference No.',
+      payRefPh:       'e.g. TT24060100001234',
+      payRefHint:     'Found in your banking app after successful payment.',
+      payQrMissing:   'QR image not uploaded yet. Please upload duitnow-qr.png to the public folder.',
     },
   },
   bm: {
@@ -218,11 +228,22 @@ const T = {
       errAddress:     'Sila masukkan alamat penghantaran anda.',
       errDistance:    'Sila tunggu pengiraan jarak selesai.',
       errTooFar:      `Alamat anda di luar kawasan penghantaran kami (maks ${MAX_DELIVERY_KM} km). Sila hubungi kami terus.`,
+      errPayment:     'Sila pilih kaedah pembayaran.',
+      errPayRef:      'Sila masukkan nombor rujukan transaksi anda.',
+      payStep:        'Pembayaran',
+      payNow:         '💳 Bayar Sekarang  (DuitNow / TnG)',
+      payLater:       '💵 Bayar Semasa Ambil / Penghantaran  (Tunai)',
+      payNowInstr:    'Imbas kod QR dengan apl bank atau Touch \'n Go anda, kemudian masukkan nombor rujukan transaksi di bawah.',
+      payRef:         'Nombor Rujukan Transaksi',
+      payRefPh:       'cth. TT24060100001234',
+      payRefHint:     'Boleh dijumpai dalam apl bank anda selepas pembayaran berjaya.',
+      payQrMissing:   'Imej QR belum dimuat naik. Sila muat naik duitnow-qr.png ke folder public.',
     },
   },
 }
 
-const ADMIN_PIN = '2018'
+const ADMIN_PIN    = '2018'
+const DUITNOW_QR   = '/duitnow-qr.png'   // ← replace with your actual DuitNow/TnG QR image
 
 interface Bean { x:number; y:number; vy:number; vx:number; size:number; rotation:number; rotSpeed:number; alpha:number; swayAmp:number; swayFreq:number; phase:number }
 
@@ -256,6 +277,10 @@ export default function Home() {
   const [addrSuggestions,    setAddrSuggestions]    = useState<Array<{display_name:string,lat:string,lon:string}>>([])
   const [showSuggestions,    setShowSuggestions]    = useState(false)
   const [suggLoading,        setSuggLoading]        = useState(false)
+  // Payment
+  const [paymentMethod,      setPaymentMethod]      = useState<'now'|'later'|null>(null)
+  const [paymentRef,         setPaymentRef]         = useState('')
+  const [qrErr,              setQrErr]              = useState(false)
 
   const canvasRef    = useRef<HTMLCanvasElement>(null)
   const tapTimer     = useRef<ReturnType<typeof setTimeout>|null>(null)
@@ -394,6 +419,7 @@ export default function Home() {
     setOrderItems(preselect ? { [preselect]: 1 } : {})
     setOrderName(''); setOrderPhone(''); setOrderType('pickup')
     setOrderAddress(''); setOrderNotes(''); setOrderError('')
+    setPaymentMethod(null); setPaymentRef(''); setQrErr(false)
     resetGeo()
     setShowOrderForm(true)
   }
@@ -410,6 +436,8 @@ export default function Home() {
       if (geoStatus === 'toofar')        { setOrderError(of.errTooFar);   return }
       if (geoStatus !== 'ok')            { setOrderError(of.errDistance); return }
     }
+    if (!paymentMethod)                            { setOrderError(of.errPayment); return }
+    if (paymentMethod === 'now' && !paymentRef.trim()) { setOrderError(of.errPayRef);  return }
 
     const itemLines = selected.map(([name, qty]) => {
       const item = t.menu.find(m => m.name === name)
@@ -425,10 +453,13 @@ export default function Home() {
     const distStr    = geoDistKm !== null ? `\n📏 *${lang==='bm'?'Jarak':'Distance'}:* ~${geoDistKm.toFixed(1)} km` : ''
     const addrLine   = orderType === 'delivery' ? `\n📍 *${lang==='bm'?'Alamat':'Address'}:* ${orderAddress}${distStr}` : ''
     const noteLine   = orderNotes.trim() ? `\n📝 *${lang==='bm'?'Nota':'Notes'}:* ${orderNotes}` : ''
+    const payLine    = paymentMethod === 'now'
+      ? `\n💳 *${lang==='bm'?'Pembayaran':'Payment'}:* DuitNow/TnG — Ref: ${paymentRef.trim()}`
+      : `\n💵 *${lang==='bm'?'Pembayaran':'Payment'}:* ${lang==='bm'?'Tunai semasa ambil/penghantaran':'Cash on Pickup/Delivery'}`
 
     const msg = lang === 'bm'
-      ? `Hai Tofu Hauz! Saya ingin membuat pesanan 🍽️\n\n👤 *Nama:* ${orderName}\n📱 *Telefon:* ${orderPhone}\n🚗 *Jenis:* ${typeLabel}${addrLine}\n\n🛒 *Pesanan:*\n${itemLines}\n\n💰 *Subtotal:* RM ${subtotal.toFixed(2)}\n🛵 *${feeLabel}:* ${feeStr}\n✅ *${totalLabel}:* RM ${total.toFixed(2)}${noteLine}`
-      : `Hi Tofu Hauz! I'd like to place an order 🍽️\n\n👤 *Name:* ${orderName}\n📱 *Phone:* ${orderPhone}\n🚗 *Type:* ${typeLabel}${addrLine}\n\n🛒 *Order:*\n${itemLines}\n\n💰 *Subtotal:* RM ${subtotal.toFixed(2)}\n🛵 *${feeLabel}:* ${feeStr}\n✅ *${totalLabel}:* RM ${total.toFixed(2)}${noteLine}`
+      ? `Hai Tofu Hauz! Saya ingin membuat pesanan 🍽️\n\n👤 *Nama:* ${orderName}\n📱 *Telefon:* ${orderPhone}\n🚗 *Jenis:* ${typeLabel}${addrLine}\n\n🛒 *Pesanan:*\n${itemLines}\n\n💰 *Subtotal:* RM ${subtotal.toFixed(2)}\n🛵 *${feeLabel}:* ${feeStr}\n✅ *${totalLabel}:* RM ${total.toFixed(2)}${payLine}${noteLine}`
+      : `Hi Tofu Hauz! I'd like to place an order 🍽️\n\n👤 *Name:* ${orderName}\n📱 *Phone:* ${orderPhone}\n🚗 *Type:* ${typeLabel}${addrLine}\n\n🛒 *Order:*\n${itemLines}\n\n💰 *Subtotal:* RM ${subtotal.toFixed(2)}\n🛵 *${feeLabel}:* ${feeStr}\n✅ *${totalLabel}:* RM ${total.toFixed(2)}${payLine}${noteLine}`
 
     window.open(`https://wa.me/${BIZ.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank')
     setShowOrderForm(false)
@@ -737,6 +768,66 @@ export default function Home() {
                     </span>
                   </div>
                 </div>
+              </div>
+
+              {/* ── Payment ── */}
+              <div>
+                <label className="block text-xs font-bold text-[#2c1a0e] mb-2 uppercase tracking-wide">{t.orderForm.payStep}</label>
+                <div className="space-y-2">
+                  {/* Pay Now */}
+                  <button
+                    onClick={() => { setPaymentMethod('now'); setOrderError('') }}
+                    className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-all ${paymentMethod==='now' ? 'border-[#d4891a] bg-amber-50 text-[#d4891a]' : 'border-amber-100 text-[#2c1a0e] hover:border-amber-200'}`}>
+                    {t.orderForm.payNow}
+                  </button>
+                  {/* Pay Later */}
+                  <button
+                    onClick={() => { setPaymentMethod('later'); setOrderError('') }}
+                    className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-all ${paymentMethod==='later' ? 'border-[#d4891a] bg-amber-50 text-[#d4891a]' : 'border-amber-100 text-[#2c1a0e] hover:border-amber-200'}`}>
+                    {t.orderForm.payLater}
+                  </button>
+                </div>
+
+                {/* Pay Now expanded — QR + reference */}
+                {paymentMethod === 'now' && (
+                  <div className="mt-4 space-y-4">
+                    <p className="text-xs text-[#7a4a28] leading-relaxed">{t.orderForm.payNowInstr}</p>
+
+                    {/* QR code + amount */}
+                    <div className="flex flex-col items-center gap-3 bg-amber-50 rounded-2xl p-4 border-2 border-amber-100">
+                      <p className="text-xs font-bold text-[#2c1a0e] uppercase tracking-wide">
+                        {lang==='bm' ? 'Jumlah Perlu Dibayar' : 'Amount to Pay'}:&nbsp;
+                        <span className="text-[#d4891a] text-base">RM {total.toFixed(2)}</span>
+                      </p>
+                      {!qrErr
+                        ? <img
+                            src={DUITNOW_QR}
+                            alt="DuitNow / TnG QR"
+                            className="w-48 h-48 object-contain rounded-xl"
+                            onError={() => setQrErr(true)}
+                          />
+                        : <div className="w-48 h-48 rounded-xl border-2 border-dashed border-amber-300 flex flex-col items-center justify-center gap-2 text-center p-4">
+                            <span className="text-3xl">📲</span>
+                            <p className="text-xs text-[#7a4a28]/70 leading-snug">{t.orderForm.payQrMissing}</p>
+                          </div>
+                      }
+                      <p className="text-[10px] text-[#7a4a28]/60 text-center">DuitNow · Touch 'n Go · Online Banking</p>
+                    </div>
+
+                    {/* Transaction reference input */}
+                    <div>
+                      <label className="block text-xs font-bold text-[#2c1a0e] mb-1.5 uppercase tracking-wide">{t.orderForm.payRef}</label>
+                      <input
+                        type="text"
+                        value={paymentRef}
+                        onChange={e => { setPaymentRef(e.target.value); setOrderError('') }}
+                        placeholder={t.orderForm.payRefPh}
+                        className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors font-mono"
+                      />
+                      <p className="mt-1 text-[10px] text-[#7a4a28]/60">{t.orderForm.payRefHint}</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {orderError && (
