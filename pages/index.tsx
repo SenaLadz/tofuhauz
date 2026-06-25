@@ -249,13 +249,19 @@ export default function Home() {
   const [orderItems,     setOrderItems]     = useState<Record<string,number>>({})
   const [orderError,     setOrderError]     = useState('')
   // Geocoding
-  const [geoStatus,      setGeoStatus]      = useState<GeoStatus>('idle')
-  const [geoDistKm,      setGeoDistKm]      = useState<number|null>(null)
-  const [geoFee,         setGeoFee]         = useState<number|null>(null)
+  const [geoStatus,          setGeoStatus]          = useState<GeoStatus>('idle')
+  const [geoDistKm,          setGeoDistKm]          = useState<number|null>(null)
+  const [geoFee,             setGeoFee]             = useState<number|null>(null)
+  // Address autocomplete
+  const [addrSuggestions,    setAddrSuggestions]    = useState<Array<{display_name:string,lat:string,lon:string}>>([])
+  const [showSuggestions,    setShowSuggestions]    = useState(false)
+  const [suggLoading,        setSuggLoading]        = useState(false)
 
   const canvasRef    = useRef<HTMLCanvasElement>(null)
   const tapTimer     = useRef<ReturnType<typeof setTimeout>|null>(null)
   const geocodeTimer = useRef<ReturnType<typeof setTimeout>|null>(null)
+  const suggTimer    = useRef<ReturnType<typeof setTimeout>|null>(null)
+  const suggBoxRef   = useRef<HTMLDivElement>(null)
 
   const t = T[lang]
   const waLink = `https://wa.me/${BIZ.whatsapp}?text=${t.waMsg}`
@@ -307,9 +313,50 @@ export default function Home() {
 
   const resetGeo = () => {
     if (geocodeTimer.current) clearTimeout(geocodeTimer.current)
+    if (suggTimer.current) clearTimeout(suggTimer.current)
     setGeoStatus('idle')
     setGeoDistKm(null)
     setGeoFee(null)
+    setAddrSuggestions([])
+    setShowSuggestions(false)
+    setSuggLoading(false)
+  }
+
+  const fetchSuggestions = async (query: string) => {
+    if (query.trim().length < 3) { setAddrSuggestions([]); setShowSuggestions(false); setSuggLoading(false); return }
+    setSuggLoading(true)
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', Malaysia')}&format=json&limit=5&countrycodes=my`,
+        { headers: { 'Accept': 'application/json' } }
+      )
+      const data = await res.json()
+      const suggestions = data.map((d: {display_name:string,lat:string,lon:string}) => ({
+        display_name: d.display_name, lat: d.lat, lon: d.lon
+      }))
+      setAddrSuggestions(suggestions)
+      setShowSuggestions(suggestions.length > 0)
+    } catch {
+      setAddrSuggestions([])
+      setShowSuggestions(false)
+    } finally {
+      setSuggLoading(false)
+    }
+  }
+
+  const selectSuggestion = (sugg: {display_name:string,lat:string,lon:string}) => {
+    if (geocodeTimer.current) clearTimeout(geocodeTimer.current)
+    if (suggTimer.current) clearTimeout(suggTimer.current)
+    setOrderAddress(sugg.display_name)
+    setAddrSuggestions([])
+    setShowSuggestions(false)
+    setSuggLoading(false)
+    setOrderError('')
+    // Distance calculated instantly from suggestion lat/lon — no extra API call
+    const km = haversine(STORE_LAT, STORE_LNG, parseFloat(sugg.lat), parseFloat(sugg.lon))
+    setGeoDistKm(km)
+    if (km > MAX_DELIVERY_KM) { setGeoStatus('toofar'); setGeoFee(null) }
+    else { setGeoFee(distanceToFee(km)); setGeoStatus('ok') }
   }
 
   // ── Persisted state ────────────────────────────────────────────────────────
@@ -387,6 +434,17 @@ export default function Home() {
     setShowOrderForm(false)
     setOrderItems({})
   }
+
+  // Close suggestion dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (suggBoxRef.current && !suggBoxRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
 
   // ── Canvas animation ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -525,29 +583,67 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Delivery address + auto-distance */}
+              {/* Delivery address + autocomplete */}
               {orderType === 'delivery' && (
                 <div>
-                  {/* Free delivery promo badge */}
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="block text-xs font-bold text-[#2c1a0e] uppercase tracking-wide">{t.orderForm.address}</label>
                     <span className="text-[10px] font-semibold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">
                       {t.orderForm.freeDelivNote}
                     </span>
                   </div>
-                  <textarea
-                    value={orderAddress}
-                    onChange={e => {
-                      const val = e.target.value
-                      setOrderAddress(val)
-                      setOrderError('')
-                      resetGeo()
-                      if (val.trim().length >= 8) {
-                        geocodeTimer.current = setTimeout(() => geocodeAddress(val), 1200)
-                      }
-                    }}
-                    placeholder={t.orderForm.addressPh} rows={3}
-                    className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors resize-none" />
+
+                  {/* Input + dropdown wrapper */}
+                  <div className="relative" ref={suggBoxRef}>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={orderAddress}
+                        onChange={e => {
+                          const val = e.target.value
+                          setOrderAddress(val)
+                          setOrderError('')
+                          resetGeo()
+                          if (suggTimer.current) clearTimeout(suggTimer.current)
+                          if (val.trim().length >= 3) {
+                            setSuggLoading(true)
+                            suggTimer.current = setTimeout(() => fetchSuggestions(val), 400)
+                          } else {
+                            setSuggLoading(false)
+                            setShowSuggestions(false)
+                          }
+                        }}
+                        onFocus={() => addrSuggestions.length > 0 && setShowSuggestions(true)}
+                        placeholder={t.orderForm.addressPh}
+                        className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 pr-9 text-sm outline-none focus:border-[#d4891a] transition-colors"
+                        autoComplete="off"
+                      />
+                      {/* Spinner inside input */}
+                      {suggLoading && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                          <svg className="animate-spin w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"/>
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Suggestions dropdown */}
+                    {showSuggestions && addrSuggestions.length > 0 && (
+                      <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-white rounded-xl border-2 border-amber-200 shadow-xl overflow-hidden">
+                        {addrSuggestions.map((sugg, i) => (
+                          <button
+                            key={i}
+                            onMouseDown={e => { e.preventDefault(); selectSuggestion(sugg) }}
+                            className="w-full px-4 py-3 text-left text-xs hover:bg-amber-50 transition-colors border-b border-amber-50 last:border-0 flex items-start gap-2">
+                            <span className="text-[#d4891a] mt-0.5 shrink-0">📍</span>
+                            <span className="text-[#2c1a0e] leading-snug">{sugg.display_name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
                   {/* Distance result */}
                   {geoStatus === 'loading' && (
@@ -562,10 +658,7 @@ export default function Home() {
                   {geoLabel && geoStatus !== 'loading' && (
                     <p className={`mt-2 text-xs font-semibold ${geoLabel.color}`}>{geoLabel.text}</p>
                   )}
-                  {geoStatus === 'idle' && orderAddress.trim().length > 0 && orderAddress.trim().length < 8 && (
-                    <p className="mt-2 text-xs text-[#7a4a28]/60">{t.orderForm.distHint}</p>
-                  )}
-                  {geoStatus === 'idle' && orderAddress.trim().length === 0 && (
+                  {geoStatus === 'idle' && (
                     <p className="mt-2 text-xs text-[#7a4a28]/60">{t.orderForm.distHint}</p>
                   )}
                 </div>
