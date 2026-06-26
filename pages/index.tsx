@@ -58,11 +58,11 @@ const T = {
       orderBtn:   'Order',
     },
     menu: [
-      { name:'Traditional Press Tofu',   basePrice:11,  desc:'Firm, dense, and ready to cook — our pressed tofu is made from pure, non-GMO soybeans with minimal moisture for a satisfying texture that holds its shape beautifully in any dish.',                                                                                                                                                                                                                                                                                                                                          price:'RM 11.00 for 8 pieces', badge:'Best Seller',        badgeColor:'bg-amber-100 text-amber-700',  emoji:'🫘', image:'/image1.png' },
-      { name:'Traditional Tau Fu Fah',   basePrice:3.5, desc:'Silky smooth and melt-in-your-mouth tender — our Tau Fu Fah is crafted from pure, non-GMO soybeans, gently set to achieve a delicate, creamy texture that soothes with every spoonful. Served with fragrant ginger syrup or rich palm sugar syrup, it is a timeless traditional dessert that warms the heart and delights the soul.',                                                                                                                                                                                            price:'RM 3.50 per pack',      badge:'Fan Fav',            badgeColor:'bg-rose-100 text-rose-700',    emoji:'🍮', image:'/image2.png' },
-      { name:'Loaf Press Tofu',          basePrice:6,   desc:'Thick, firm, and beautifully structured — our Loaf Pressed Tofu is crafted from pure, non-GMO soybeans, pressed into a generous loaf block for maximum versatility in the kitchen. With its dense texture and low moisture content, it slices cleanly, holds its shape perfectly, and soaks up marinades and sauces like no other. Whether pan-fried, grilled, steamed, or added into hearty stews and curries, this is the go-to tofu for bold, satisfying meals.',                                                               price:'RM 6.00',               badge:'Trending',           badgeColor:'bg-red-100 text-red-700',      emoji:'🥡', image:'/image3.png' },
-      { name:'Fresh Soy Water (Pack)',   basePrice:6,   desc:'Pure, refreshing, and naturally wholesome — our Fresh Soy Water is made from carefully selected, non-GMO soybeans, gently processed to preserve its natural goodness and mild, creamy flavour. Packed fresh for your convenience, it is a clean and nourishing plant-based drink that is free from artificial additives, perfect for the whole family to enjoy any time of the day.',                                                                                                                                                 price:'RM 6.00',               badge:'Local Twist',        badgeColor:'bg-yellow-100 text-yellow-700',emoji:'🧃', image:'/image4.png' },
-      { name:'Fresh Soy Water (Bottle)', basePrice:2,   desc:'Pure, refreshing, and naturally wholesome — our Fresh Soy Water comes in a handy bottle, made from carefully selected, non-GMO soybeans, gently processed to preserve its natural goodness and mild, creamy flavour. Grab and go, sip and savour — a clean, nourishing plant-based drink with no artificial additives, perfect for a healthy lifestyle on the move.',                                                                                                                                                            price:'RM 2.00',               badge:'Signature',          badgeColor:'bg-cyan-100 text-cyan-700',    emoji:'🍶', image:'/image5.png' },
+      { name:'Traditional Press Tofu',   basePrice:11,  desc:'Firm, dense, and ready to cook. Our pressed tofu is made from pure, non-GMO soybeans with minimal moisture for a satisfying texture that holds its shape beautifully in any dish.',                                                                                                                                                                                                                                                                                                                                          price:'RM 11.00 for 8 pieces', badge:'Best Seller',        badgeColor:'bg-amber-100 text-amber-700',  emoji:'🫘', image:'/image1.png' },
+      { name:'Traditional Tau Fu Fah',   basePrice:3.5, desc:'Silky smooth and melt in your mouth. Our Tau Fu Fah is crafted from pure, non-GMO soybeans, gently set to achieve a delicate, creamy texture that soothes with every spoonful. Served with fragrant ginger syrup or rich palm sugar syrup, it is a timeless traditional dessert that warms the heart and delights the soul.',                                                                                                                                                                                            price:'RM 3.50 per pack',      badge:'Fan Fav',            badgeColor:'bg-rose-100 text-rose-700',    emoji:'🍮', image:'/image2.png' },
+      { name:'Loaf Press Tofu',          basePrice:6,   desc:'Thick, firm, and beautifully structured. Our Loaf Pressed Tofu is crafted from pure, non-GMO soybeans, pressed into a generous loaf block for maximum versatility in the kitchen. With its dense texture and low moisture content, it slices cleanly, holds its shape perfectly, and soaks up marinades and sauces like no other. Whether pan fried, grilled, steamed, or added into hearty stews and curries, this is the go-to tofu for bold, satisfying meals.',                                                               price:'RM 6.00',               badge:'Trending',           badgeColor:'bg-red-100 text-red-700',      emoji:'🥡', image:'/image3.png' },
+      { name:'Fresh Soy Water (Pack)',   basePrice:6,   desc:'Pure, refreshing, and naturally wholesome. Our Fresh Soy Water is made from carefully selected, non-GMO soybeans, gently processed to preserve its natural goodness and mild, creamy flavour. Packed fresh for your convenience, it is a clean and nourishing plant based drink that is free from artificial additives, perfect for the whole family to enjoy any time of the day.',                                                                                                                                                 price:'RM 6.00',               badge:'Local Twist',        badgeColor:'bg-yellow-100 text-yellow-700',emoji:'🧃', image:'/image4.png' },
+      { name:'Fresh Soy Water (Bottle)', basePrice:2,   desc:'Pure, refreshing, and naturally wholesome. Our Fresh Soy Water comes in a handy bottle, made from carefully selected, non-GMO soybeans, gently processed to preserve its natural goodness and mild, creamy flavour. Grab and go, sip and clean, nourishing plant based drink with no artificial additives, perfect for a healthy lifestyle on the move.',                                                                                                                                                            price:'RM 2.00',               badge:'Signature',          badgeColor:'bg-cyan-100 text-cyan-700',    emoji:'🍶', image:'/image5.png' },
     ],
     about: {
       label:   'Our Story',
@@ -139,7 +139,7 @@ const T = {
   },
   bm: {
     tagline:     'Segar. Berkhasiat. Lazat.',
-    description: 'Hidangan berasaskan tauhu buatan tangan dengan penuh kasih sayang — pemakanan berasaskan tumbuhan yang tidak mengorbankan rasa.',
+    description: 'Hidangan berasaskan tauhu buatan tangan dengan penuh kasih sayang. Pemakanan berasaskan tumbuhan yang tidak mengorbankan rasa.',
     nav: { menu:'Menu', about:'Tentang', testimonials:'Testimoni', contact:'Hubungi', order:'Pesan Sekarang' },
     hero: {
       badge: `🫘 EST. ${BIZ.established}  ✦  Nilai, Negeri Sembilan`,
@@ -149,8 +149,8 @@ const T = {
     craft: ['🫘 TOFU HAUZ','🍚 SEGAR SETIAP HARI','💚 BERASASKAN TUMBUHAN','🏠 BUATAN SENDIRI','✦ EST. 2018','🍜 NILAI, NS'],
     features: [
       { icon:'🌱', title:'Berasaskan Tumbuhan',      text:'Setiap hidangan dibina dengan bahan-bahan tumbuhan yang sihat tanpa mengorbankan rasa.' },
-      { icon:'🔪', title:'Dibuat Segar Setiap Hari', text:'Kami menyediakan tauhu dan sos sendiri setiap pagi untuk kualiti terbaik setiap masa.' },
-      { icon:'💚', title:'Tanpa Rasa Bersalah',      text:'Tinggi protein, rendah kolesterol — makan sihat tidak pernah terasa senikmat ini.' },
+      { icon:'🔪', title:'Dibuat Segar Setiap Hari', text:'Kami menyediakan tauhu dan resipi sendiri setiap pagi untuk kualiti terbaik setiap masa.' },
+      { icon:'💚', title:'Tanpa Rasa Bersalah',      text:'Tinggi protein, rendah kolesterol dan makanan sihat tidak pernah terasa senikmat ini.' },
     ],
     menuSection: {
       label:      'Apa Yang Kami Hidangkan',
@@ -161,16 +161,16 @@ const T = {
       orderBtn:   'Pesan',
     },
     menu: [
-      { name:'Tauhu Press Tradisional',  basePrice:11,  desc:'Padat, kenyal, dan sedia untuk dimasak — tauhu press kami diperbuat daripada kacang soya tulen tanpa GMO dengan kandungan air yang rendah, menghasilkan tekstur yang memuaskan dan mengekalkan bentuknya dengan sempurna dalam setiap hidangan.',                                                                                                                                                                                                                                                                                                 price:'RM 11.00 untuk 8 ketul', badge:'Terlaris',          badgeColor:'bg-amber-100 text-amber-700',  emoji:'🫘', image:'/image1.png' },
-      { name:'Tau Fu Fah Tradisional',   basePrice:3.5, desc:'Lembut, licin, dan cair di mulut — Tau Fu Fah kami dibuat daripada kacang soya tulen tanpa GMO, diset dengan teliti untuk menghasilkan tekstur yang halus dan berkrim yang menenangkan dengan setiap suapan. Dihidangkan dengan sirap halia yang wangi atau sirap gula merah yang kaya, ia adalah pencuci mulut tradisional yang abadi yang menghangatkan hati dan menyukakan jiwa.',                                                                                                                                                                    price:'RM 3.50 setiap pek',     badge:'Kegemaran',         badgeColor:'bg-rose-100 text-rose-700',    emoji:'🍮', image:'/image2.png' },
-      { name:'Tauhu Press Loaf',         basePrice:6,   desc:'Tebal, padat, dan berstruktur indah — Tauhu Press Loaf kami dibuat daripada kacang soya tulen tanpa GMO, ditekan ke dalam blok loaf yang besar untuk fleksibiliti maksimum di dapur. Dengan teksturnya yang padat dan kandungan air yang rendah, ia dipotong dengan bersih, mengekalkan bentuknya dengan sempurna, dan menyerap marinasi dan sos seperti tiada yang lain. Sama ada digoreng, dibakar, dikukus, atau ditambah ke dalam rebusan dan kari yang sedap, ini adalah tauhu pilihan untuk hidangan yang berani dan memuaskan.',  price:'RM 6.00',                badge:'Trending',          badgeColor:'bg-red-100 text-red-700',      emoji:'🥡', image:'/image3.png' },
-      { name:'Air Soya Segar (Pek)',     basePrice:6,   desc:'Tulen, menyegarkan, dan semulajadi berkhasiat — Air Soya Segar kami dibuat daripada kacang soya terpilih tanpa GMO, diproses dengan lembut untuk mengekalkan kebaikan semulajadi dan rasa ringan yang berkrim. Dikemas segar untuk kemudahan anda, ia adalah minuman berasaskan tumbuhan yang bersih dan berkhasiat tanpa bahan tambahan buatan, sesuai untuk seluruh keluarga menikmati pada bila-bila masa.',                                                                                                                               price:'RM 6.00',                badge:'Sentuhan Tempatan', badgeColor:'bg-yellow-100 text-yellow-700',emoji:'🧃', image:'/image4.png' },
-      { name:'Air Soya Segar (Botol)',   basePrice:2,   desc:'Tulen, menyegarkan, dan semulajadi berkhasiat — Air Soya Segar kami hadir dalam botol yang mudah, dibuat daripada kacang soya terpilih tanpa GMO, diproses dengan lembut untuk mengekalkan kebaikan semulajadi dan rasa ringan yang berkrim. Ambil dan pergi, teguk dan nikmati — minuman berasaskan tumbuhan yang bersih dan berkhasiat tanpa bahan tambahan buatan, sesuai untuk gaya hidup sihat yang aktif.',                                                                                                                             price:'RM 2.00',                badge:'Signature',         badgeColor:'bg-cyan-100 text-cyan-700',    emoji:'🍶', image:'/image5.png' },
+      { name:'Tauhu Press Tradisional',  basePrice:11,  desc:'Padat, kenyal, dan sedia untuk dimasak. Tauhu press kami diperbuat daripada kacang soya tulen tanpa GMO dengan kandungan air yang rendah, menghasilkan tekstur yang memuaskan dan mengekalkan bentuknya dengan sempurna dalam setiap hidangan.',                                                                                                                                                                                                                                                                                                 price:'RM 11.00 untuk 8 ketul', badge:'Terlaris',          badgeColor:'bg-amber-100 text-amber-700',  emoji:'🫘', image:'/image1.png' },
+      { name:'Tau Fu Fah Tradisional',   basePrice:3.5, desc:'Lembut, licin, dan cair di mulut. Tau Fu Fah kami dibuat daripada kacang soya tulen tanpa GMO, diset dengan teliti untuk menghasilkan tekstur yang halus dan berkrim yang menenangkan dengan setiap suapan. Dihidangkan dengan sirap halia yang wangi atau sirap gula merah yang kaya, ia adalah pencuci mulut tradisional yang abadi yang menghangatkan hati dan menyukakan jiwa.',                                                                                                                                                                    price:'RM 3.50 setiap pek',     badge:'Kegemaran',         badgeColor:'bg-rose-100 text-rose-700',    emoji:'🍮', image:'/image2.png' },
+      { name:'Tauhu Press Loaf',         basePrice:6,   desc:'Tebal, padat, dan berstruktur indah. Tauhu Press Loaf kami dibuat daripada kacang soya tulen tanpa GMO, ditekan ke dalam blok loaf yang besar untuk fleksibiliti maksimum di dapur. Dengan teksturnya yang padat dan kandungan air yang rendah, ia dipotong dengan bersih, mengekalkan bentuknya dengan sempurna, dan menyerap marinasi dan sos seperti tiada yang lain. Sama ada digoreng, dibakar, dikukus, atau ditambah ke dalam rebusan dan kari yang sedap, ini adalah tauhu pilihan untuk hidangan yang berani dan memuaskan.',  price:'RM 6.00',                badge:'Trending',          badgeColor:'bg-red-100 text-red-700',      emoji:'🥡', image:'/image3.png' },
+      { name:'Air Soya Segar (Pek)',     basePrice:6,   desc:'Tulen, menyegarkan, dan semulajadi berkhasiat. Air Soya Segar kami dibuat daripada kacang soya terpilih tanpa GMO, diproses dengan lembut untuk mengekalkan kebaikan semulajadi dan rasa ringan yang berkrim. Dikemas segar untuk kemudahan anda, ia adalah minuman berasaskan tumbuhan yang bersih dan berkhasiat tanpa bahan tambahan buatan, sesuai untuk seluruh keluarga menikmati pada bila-bila masa.',                                                                                                                               price:'RM 6.00',                badge:'Sentuhan Tempatan', badgeColor:'bg-yellow-100 text-yellow-700',emoji:'🧃', image:'/image4.png' },
+      { name:'Air Soya Segar (Botol)',   basePrice:2,   desc:'Tulen, menyegarkan, dan semulajadi berkhasiat. Air Soya Segar kami hadir dalam botol yang mudah, dibuat daripada kacang soya terpilih tanpa GMO, diproses dengan lembut untuk mengekalkan kebaikan semulajadi dan rasa ringan yang berkrim. Ambil dan pergi, teguk dan nikmati minuman berasaskan tumbuhan yang bersih dan berkhasiat tanpa bahan tambahan buatan, sesuai untuk gaya hidup sihat yang aktif.',                                                                                                                             price:'RM 2.00',                badge:'Signature',         badgeColor:'bg-cyan-100 text-cyan-700',    emoji:'🍶', image:'/image5.png' },
     ],
     about: {
       label:   'Kisah Kami',
       heading: 'Mengapa Kami Tubuhkan Tofu Hauz',
-      p1:      'Kami memulakan Tofu Hauz dengan satu kepercayaan yang mudah — bahawa makanan berasaskan tumbuhan seharusnya menarik, memuaskan, dan mudah diakses oleh semua orang. Tiada salad hambar. Tiada pengganti yang membosankan.',
+      p1:      'Kami memulakan Tofu Hauz dengan satu kepercayaan yang mudah bahawa makanan berasaskan tumbuhan seharusnya menarik, memuaskan, dan mudah diakses oleh semua orang. Tiada salad hambar. Tiada pengganti yang membosankan.',
       p2:      `Setiap Kelazatan, Khasiat, dan Kenikmatan yang kami hidangkan adalah bukti apa yang tauhu benar-benar boleh lakukan apabila diperlakukan dengan penuh perhatian, kreativiti, dan resipi yang baik. Dibuat segar, dibuat dengan hati, terus dari dapur rumah kami sejak ${BIZ.established}.`,
       quote:   '"Makanan yang hebat bermula dengan bahan-bahan yang hebat dan banyak kasih sayang."',
     },
@@ -273,10 +273,6 @@ export default function Home() {
   const [geoStatus,          setGeoStatus]          = useState<GeoStatus>('idle')
   const [geoDistKm,          setGeoDistKm]          = useState<number|null>(null)
   const [geoFee,             setGeoFee]             = useState<number|null>(null)
-  // Address autocomplete
-  const [addrSuggestions,    setAddrSuggestions]    = useState<Array<{display_name:string,lat:string,lon:string}>>([])
-  const [showSuggestions,    setShowSuggestions]    = useState(false)
-  const [suggLoading,        setSuggLoading]        = useState(false)
   // Payment
   const [paymentMethod,      setPaymentMethod]      = useState<'now'|'later'|null>(null)
   const [paymentRef,         setPaymentRef]         = useState('')
@@ -289,8 +285,6 @@ export default function Home() {
   const videoRef     = useRef<HTMLVideoElement>(null)
   const tapTimer     = useRef<ReturnType<typeof setTimeout>|null>(null)
   const geocodeTimer = useRef<ReturnType<typeof setTimeout>|null>(null)
-  const suggTimer    = useRef<ReturnType<typeof setTimeout>|null>(null)
-  const suggBoxRef   = useRef<HTMLDivElement>(null)
 
   const t = T[lang]
   const waLink = `https://wa.me/${BIZ.whatsapp}?text=${t.waMsg}`
@@ -342,50 +336,9 @@ export default function Home() {
 
   const resetGeo = () => {
     if (geocodeTimer.current) clearTimeout(geocodeTimer.current)
-    if (suggTimer.current) clearTimeout(suggTimer.current)
     setGeoStatus('idle')
     setGeoDistKm(null)
     setGeoFee(null)
-    setAddrSuggestions([])
-    setShowSuggestions(false)
-    setSuggLoading(false)
-  }
-
-  const fetchSuggestions = async (query: string) => {
-    if (query.trim().length < 3) { setAddrSuggestions([]); setShowSuggestions(false); setSuggLoading(false); return }
-    setSuggLoading(true)
-    try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', Malaysia')}&format=json&limit=5&countrycodes=my`,
-        { headers: { 'Accept': 'application/json' } }
-      )
-      const data = await res.json()
-      const suggestions = data.map((d: {display_name:string,lat:string,lon:string}) => ({
-        display_name: d.display_name, lat: d.lat, lon: d.lon
-      }))
-      setAddrSuggestions(suggestions)
-      setShowSuggestions(suggestions.length > 0)
-    } catch {
-      setAddrSuggestions([])
-      setShowSuggestions(false)
-    } finally {
-      setSuggLoading(false)
-    }
-  }
-
-  const selectSuggestion = (sugg: {display_name:string,lat:string,lon:string}) => {
-    if (geocodeTimer.current) clearTimeout(geocodeTimer.current)
-    if (suggTimer.current) clearTimeout(suggTimer.current)
-    setOrderAddress(sugg.display_name)
-    setAddrSuggestions([])
-    setShowSuggestions(false)
-    setSuggLoading(false)
-    setOrderError('')
-    // Distance calculated instantly from suggestion lat/lon — no extra API call
-    const km = haversine(STORE_LAT, STORE_LNG, parseFloat(sugg.lat), parseFloat(sugg.lon))
-    setGeoDistKm(km)
-    if (km > MAX_DELIVERY_KM) { setGeoStatus('toofar'); setGeoFee(null) }
-    else { setGeoFee(distanceToFee(km)); setGeoStatus('ok') }
   }
 
   // ── Persisted state ────────────────────────────────────────────────────────
@@ -469,17 +422,6 @@ export default function Home() {
     setShowOrderForm(false)
     setOrderItems({})
   }
-
-  // Close suggestion dropdown on outside click
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (suggBoxRef.current && !suggBoxRef.current.contains(e.target as Node)) {
-        setShowSuggestions(false)
-      }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
 
   // ── Canvas animation ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -665,57 +607,23 @@ export default function Home() {
                     </span>
                   </div>
 
-                  {/* Input + dropdown wrapper */}
-                  <div className="relative" ref={suggBoxRef}>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={orderAddress}
-                        onChange={e => {
-                          const val = e.target.value
-                          setOrderAddress(val)
-                          setOrderError('')
-                          resetGeo()
-                          if (suggTimer.current) clearTimeout(suggTimer.current)
-                          if (val.trim().length >= 3) {
-                            setSuggLoading(true)
-                            suggTimer.current = setTimeout(() => fetchSuggestions(val), 400)
-                          } else {
-                            setSuggLoading(false)
-                            setShowSuggestions(false)
-                          }
-                        }}
-                        onFocus={() => addrSuggestions.length > 0 && setShowSuggestions(true)}
-                        placeholder={t.orderForm.addressPh}
-                        className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 pr-9 text-sm outline-none focus:border-[#d4891a] transition-colors"
-                        autoComplete="off"
-                      />
-                      {/* Spinner inside input */}
-                      {suggLoading && (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                          <svg className="animate-spin w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"/>
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Suggestions dropdown */}
-                    {showSuggestions && addrSuggestions.length > 0 && (
-                      <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-white rounded-xl border-2 border-amber-200 shadow-xl overflow-hidden">
-                        {addrSuggestions.map((sugg, i) => (
-                          <button
-                            key={i}
-                            onMouseDown={e => { e.preventDefault(); selectSuggestion(sugg) }}
-                            className="w-full px-4 py-3 text-left text-xs hover:bg-amber-50 transition-colors border-b border-amber-50 last:border-0 flex items-start gap-2">
-                            <span className="text-[#d4891a] mt-0.5 shrink-0">📍</span>
-                            <span className="text-[#2c1a0e] leading-snug">{sugg.display_name}</span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  <input
+                    type="text"
+                    value={orderAddress}
+                    onChange={e => {
+                      const val = e.target.value
+                      setOrderAddress(val)
+                      setOrderError('')
+                      resetGeo()
+                      if (val.trim().length >= 6) {
+                        setGeoStatus('loading')
+                        if (geocodeTimer.current) clearTimeout(geocodeTimer.current)
+                        geocodeTimer.current = setTimeout(() => geocodeAddress(val), 1200)
+                      }
+                    }}
+                    placeholder={t.orderForm.addressPh}
+                    className="w-full border-2 border-amber-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#d4891a] transition-colors"
+                  />
 
                   {/* Distance result */}
                   {geoStatus === 'loading' && (
