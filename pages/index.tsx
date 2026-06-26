@@ -487,13 +487,13 @@ export default function Home() {
         >
           <video
             ref={videoRef}
-            src="/Recording%20tofu%20animation.mp4"
+            src="/Recording%20tofu%20animation%202.mp4"
             muted
             playsInline
             className="absolute inset-0 w-full h-full object-contain"
             onLoadedMetadata={() => {
               if (videoRef.current) {
-                videoRef.current.currentTime = 5
+                videoRef.current.currentTime = 6
                 videoRef.current.play().catch(() => {})
               }
             }}
