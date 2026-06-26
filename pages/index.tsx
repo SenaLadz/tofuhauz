@@ -36,7 +36,7 @@ function distanceToFee(km: number): number {
 const T = {
   en: {
     tagline:     'Fresh. Wholesome. Delicious.',
-    description: 'Handcrafted tofu-based dishes made with love — plant-powered eating that never compromises on taste.',
+    description: 'Handcrafted tofu based dishes made with love and plant powered eating that never compromises on taste.',
     nav: { menu:'Menu', about:'About', testimonials:'Testimonials', contact:'Contact', order:'Order Now' },
     hero: {
       badge: `🫘 EST. ${BIZ.established}  ✦  Nilai, Negeri Sembilan`,
@@ -45,9 +45,9 @@ const T = {
     },
     craft: ['🫘 TOFU HAUZ','🍚 FRESH DAILY','💚 PLANT-BASED','🏠 HOMEMADE','✦ EST. 2018','🍜 NILAI, NS'],
     features: [
-      { icon:'🌱', title:'Plant-Based',      text:'Every dish is built around wholesome, plant-forward ingredients with no compromise on flavour.' },
-      { icon:'🔪', title:'Made Fresh Daily', text:'We prepare our tofu and sauces in-house every morning for the best quality every single time.' },
-      { icon:'💚', title:'Guilt-Free',       text:'High in protein, low in cholesterol — eating well has never tasted this good.' },
+      { icon:'🌱', title:'Plant Based',      text:'Every dish is built around wholesome, plant forward ingredients with no compromise on flavour.' },
+      { icon:'🔪', title:'Made Fresh Daily', text:'We prepare our tofu and sauces homemade every morning for the best quality every single time.' },
+      { icon:'💚', title:'Guilt Free',       text:'High in protein, low in cholesterol, eating well has never tasted this good.' },
     ],
     menuSection: {
       label:      'What We Serve',
@@ -67,22 +67,22 @@ const T = {
     about: {
       label:   'Our Story',
       heading: 'Why We Started Tofu Hauz',
-      p1:      'We started Tofu Hauz from a simple belief — that plant-based food should be exciting, satisfying, and accessible to everyone. No bland salads. No sad substitutes.',
-      p2:      `Every bowl, skewer, and dessert we serve is a testament to what tofu can really do when it's treated with care, creativity, and good spices. Made fresh, made with heart, right from our home kitchen since ${BIZ.established}.`,
+      p1:      'We started Tofu Hauz from a simple belief that plant based food should be exciting, satisfying, and accessible to everyone. No bland salads. No sad substitutes.',
+      p2:      `Every Delicacy, Nourishment, and Indulgence we serve is a testament to what tofu can really do when it's treated with care, creativity, and good recipe. Made fresh, made with heart, right from our home kitchen since ${BIZ.established}.`,
       quote:   '"Great food starts with great ingredients and a lot of love."',
     },
     testimonials: {
       label:   'Happy Customers',
       heading: 'What People Say',
       items: [
-        { name:'Aisyah R.', rating:5, text:'The Silken Tofu Bowl is life-changing. I come here every week — the garlic soy broth is just perfect!' },
-        { name:'James T.',  rating:5, text:"Never been a tofu fan until Tofu Hauz. The Crispy Katsu converted me. My whole office orders from here now." },
-        { name:'Priya N.',  rating:5, text:'Love the Tau Fu Fah! Reminds me of my childhood but elevated. Great place, very friendly staff too.' },
+        { name:'Aisyah R.', rating:5, text:'"The smoothest Tau Fu Fah I have ever had! Silky texture with fragrant palm sugar syrup, tastes just like homemade. A must try!"' },
+        { name:'Fatima Z.',  rating:5, text:'"Never been a tofu fan until Tofu Hauz. Best pressed tofu I have used! Firm, fresh and soaks up flavour beautifully. My kitchen staple every single week!"' },
+        { name:'Mr.Hamza',  rating:5, text:'"The most delicious soy drink ever! Natural, pure taste and not too sweet. The whole family loves it!"' },
       ],
     },
     cta: {
       heading: 'Ready to Order?',
-      sub:     `Skip the queue — order ahead via WhatsApp. Fresh, homemade, ready for pickup or delivery. Free delivery on orders RM${FREE_DELIVERY_MIN}+!`,
+      sub:     `Skip the queue? order ahead via WhatsApp. Fresh, homemade, ready for pickup or delivery. Free delivery on orders RM${FREE_DELIVERY_MIN}+!`,
       btn:     'Place an Order',
     },
     contact: {
@@ -171,21 +171,21 @@ const T = {
       label:   'Kisah Kami',
       heading: 'Mengapa Kami Tubuhkan Tofu Hauz',
       p1:      'Kami memulakan Tofu Hauz dengan satu kepercayaan yang mudah — bahawa makanan berasaskan tumbuhan seharusnya menarik, memuaskan, dan mudah diakses oleh semua orang. Tiada salad hambar. Tiada pengganti yang membosankan.',
-      p2:      `Setiap mangkuk, cucuk, dan pencuci mulut yang kami hidangkan adalah bukti apa yang tauhu boleh lakukan apabila diperlakukan dengan penuh perhatian, kreativiti, dan rempah yang baik. Dibuat segar, dibuat dengan hati, terus dari dapur rumah kami sejak ${BIZ.established}.`,
+      p2:      `Setiap Kelazatan, Khasiat, dan Kenikmatan yang kami hidangkan adalah bukti apa yang tauhu benar-benar boleh lakukan apabila diperlakukan dengan penuh perhatian, kreativiti, dan resipi yang baik. Dibuat segar, dibuat dengan hati, terus dari dapur rumah kami sejak ${BIZ.established}.`,
       quote:   '"Makanan yang hebat bermula dengan bahan-bahan yang hebat dan banyak kasih sayang."',
     },
     testimonials: {
       label:   'Pelanggan Gembira',
       heading: 'Apa Kata Mereka',
       items: [
-        { name:'Aisyah R.', rating:5, text:'Mangkuk Tauhu Sutera sangat mengubah hidup. Saya datang setiap minggu — kuah soya bawang putihnya memang sempurna!' },
-        { name:'James T.',  rating:5, text:'Tak pernah suka tauhu sebelum ini. Tauhu Katsu Rangup telah mengubah fikiran saya. Seluruh pejabat saya order dari sini sekarang.' },
-        { name:'Priya N.',  rating:5, text:'Saya suka Tau Fu Fah! Mengingatkan zaman kecil tapi lebih mewah. Tempat yang hebat, pekerja yang sangat mesra.' },
+        { name:'Aisyah R.',  rating:5, text:'"Tau Fu Fah paling lembut yang pernah saya rasa! Teksturnya lembut dengan air gula anau yang wangi, rasa seperti masakan rumah. Wajib cuba!"' },
+        { name:'Fatima Z.',  rating:5, text:'"Saya tak pernah suka tauhu sebelum ini. Tauhu dari Tofu Hauz terbaik yang pernah saya guna! Padat, segar dan menyerap perisa dengan sempurna. Bahan dapur saya setiap minggu!"' },
+        { name:'Mr.Hamza',  rating:5, text:'"Minuman soya paling sedap yang pernah ada! Rasa semula jadi, tulen dan tidak terlalu manis. Seluruh keluarga suka!"' },
       ],
     },
     cta: {
       heading: 'Bersedia untuk Memesan?',
-      sub:     `Langkau giliran — pesan awal melalui WhatsApp. Segar, buatan sendiri, sedia untuk ambil atau penghantaran. Penghantaran percuma untuk pesanan RM${FREE_DELIVERY_MIN}+!`,
+      sub:     `Langkau giliran? Pesan awal melalui WhatsApp. Segar, buatan sendiri, sedia untuk ambil atau penghantaran. Penghantaran percuma untuk pesanan RM${FREE_DELIVERY_MIN}+!`,
       btn:     'Buat Pesanan',
     },
     contact: {
@@ -281,8 +281,12 @@ export default function Home() {
   const [paymentMethod,      setPaymentMethod]      = useState<'now'|'later'|null>(null)
   const [paymentRef,         setPaymentRef]         = useState('')
   const [qrErr,              setQrErr]              = useState(false)
+  // Intro
+  const [showIntro,          setShowIntro]          = useState(true)
+  const [introFading,        setIntroFading]        = useState(false)
 
   const canvasRef    = useRef<HTMLCanvasElement>(null)
+  const videoRef     = useRef<HTMLVideoElement>(null)
   const tapTimer     = useRef<ReturnType<typeof setTimeout>|null>(null)
   const geocodeTimer = useRef<ReturnType<typeof setTimeout>|null>(null)
   const suggTimer    = useRef<ReturnType<typeof setTimeout>|null>(null)
@@ -527,8 +531,45 @@ export default function Home() {
     return null
   })()
 
+  function dismissIntro() {
+    setIntroFading(true)
+    setTimeout(() => setShowIntro(false), 800)
+  }
+
   return (
     <>
+      {showIntro && (
+        <div
+          className={`fixed inset-0 z-[200] flex items-center justify-center transition-opacity duration-700 ${introFading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          style={{background:'linear-gradient(160deg,#fef9ec 0%,#fff8e1 50%,#ffefd5 100%)'}}
+        >
+          <video
+            ref={videoRef}
+            src="/Recording%20tofu%20animation.mp4"
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-contain"
+            onLoadedMetadata={() => {
+              if (videoRef.current) {
+                videoRef.current.currentTime = 5
+                videoRef.current.play().catch(() => {})
+              }
+            }}
+            onTimeUpdate={() => {
+              if (videoRef.current && videoRef.current.currentTime >= 14) {
+                videoRef.current.pause()
+                dismissIntro()
+              }
+            }}
+          />
+          <button
+            onClick={dismissIntro}
+            className="absolute bottom-8 right-8 text-[#2c1a0e] text-sm font-medium bg-amber-100 hover:bg-amber-200 rounded-full px-5 py-2 z-10 transition-colors"
+          >
+            Skip ›
+          </button>
+        </div>
+      )}
       <Head>
         <title>{BIZ.name} — {t.tagline}</title>
         <meta name="description" content={t.description} />
@@ -806,7 +847,7 @@ export default function Home() {
                             className="w-48 h-48 object-contain rounded-xl"
                             onError={() => setQrErr(true)}
                           />
-                        : <div className="w-48 h-48 rounded-xl border-2 border-dashed border-amber-300 flex flex-col items-center justify-center gap-2 text-center p-4">
+                        : <div className="w-48 h-48 rounded-xl Fborder-2 border-dashed border-amber-300 flex flex-col items-center justify-center gap-2 text-center p-4">
                             <span className="text-3xl">📲</span>
                             <p className="text-xs text-[#7a4a28]/70 leading-snug">{t.orderForm.payQrMissing}</p>
                           </div>
